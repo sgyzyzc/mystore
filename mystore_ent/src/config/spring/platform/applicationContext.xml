@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd  
+    http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd">
+	<context:component-scan base-package="com.cib.**.dao"/>
+	<context:component-scan base-package="com.cib.**.service"/>
+	<bean class="com.cib.cap4j.core.context.ContextUtil"/>
+	<bean id="cap4jConf" class="com.cib.cap4j.core.conf.Cap4jConf">
+		<property name="datePattern" value="${date.pattern}"/>
+		<property name="timestampPattern" value="${timestamp.pattern}"/>
+		<property name="enableCaptcha" value="${sys.enableCaptcha}"/>
+		<property name="keyStepLength" value="${sys.keyStepLength}"/>
+		<property name="keyValueLength" value="${sys.keyValueLength}"/>
+		<property name="enableKeyZip" value="${sys.enableKeyZip}"/>
+		<property name="escapeHTML" value="${sys.escapeHTML}"/>
+		<property name="language" value="${sys.language}"></property>
+	</bean>
+	<bean id="keyGenerater" class="com.cib.cap4j.core.base.service.impl.UuidKeyGenerateImpl"/>
+	<!-- properties配置文件 -->
+	<context:property-placeholder location="classpath:env.properties" ignore-unresolvable="true"/>
+	<context:property-placeholder location="classpath:config/platform/cap4jconfig.properties" ignore-unresolvable="true"/>
+	
+	<bean id="messageSource"
+		class="org.springframework.context.support.ResourceBundleMessageSource">
+		<property name="basenames">
+			<list>
+				<value>config.msg.platform</value>
+				<value>config.msg.cfn</value>
+				<value>config.msg.app</value>
+			</list>
+		</property>
+		<property name="useCodeAsDefaultMessage" value="true" />
+	</bean>
+	
+</beans>

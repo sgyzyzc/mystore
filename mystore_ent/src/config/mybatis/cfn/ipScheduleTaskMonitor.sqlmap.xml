@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cib.cap4j.cfn.schedule.dao.IScheduleTaskMonitorDao">
+	<resultMap id="scheduleTaskMonitorVO_result" type="com.cib.cap4j.cfn.schedule.vo.IPScheduleTaskMonitorVO">
+        <id column="ZJ" property="zj" />
+        <result column="RWBM" property="rwbm" />
+        <result column="RWMC" property="rwmc" />
+        <result column="JHZXSJ" property="jhzxsj" />
+        <result column="RWKSSJ" property="rwkssj" />
+        <result column="RWJSSJ" property="rwjssj" />
+        <result column="RWZT" property="rwzt" />
+        <result column="RWXH" property="rwxh" />
+        <result column="BZ" property="bz" />
+    </resultMap>
+	
+	<insert id="insertScheduleTaskMonitor" parameterType="com.cib.cap4j.cfn.schedule.vo.IPScheduleTaskMonitorVO">
+		insert into ip_scheduletask_monitor (ZJ, RWBM, RWMC, JHZXSJ, RWKSSJ, RWJSSJ, RWZT, RWXH, BZ, ZXJQ)
+		values
+		(#{zj,jdbcType=VARCHAR},#{rwbm,jdbcType=VARCHAR},
+		#{rwmc,jdbcType=VARCHAR},#{jhzxsj,jdbcType=TIMESTAMP},
+		#{rwkssj,jdbcType=TIMESTAMP},#{rwjssj,jdbcType=TIMESTAMP},
+		#{rwzt,jdbcType=VARCHAR},#{rwxh,jdbcType=VARCHAR},
+		#{bz,jdbcType=VARCHAR},#{zxjq,jdbcType=VARCHAR})
+    </insert>
+    
+    <update id="updateScheduleTaskMonitor" parameterType="com.cib.cap4j.cfn.schedule.vo.IPScheduleTaskMonitorVO">
+		update ip_scheduletask_monitor 
+			<set>
+				<if test="rwbm != null">RWBM = #{rwbm,jdbcType=VARCHAR},</if>
+				<if test="rwmc != null">RWMC = #{rwmc,jdbcType=VARCHAR},</if>
+				<if test="jhzxsj != null">JHZXSJ = #{jhzxsj,jdbcType=TIMESTAMP},</if>
+				<if test="rwkssj != null">RWKSSJ = #{rwkssj,jdbcType=TIMESTAMP},</if>
+				<if test="rwjssj != null">RWJSSJ = #{rwjssj,jdbcType=TIMESTAMP},</if>
+				<if test="rwzt != null">RWZT = #{rwzt,jdbcType=VARCHAR},</if>
+				<if test="rwxh != null">RWXH = #{rwxh,jdbcType=VARCHAR},</if>
+				<if test="bz != null">BZ = #{bz,jdbcType=VARCHAR}</if>
+			</set>
+			where ZJ = #{zj}
+    </update>
+    
+    <delete id="deleteScheduleTaskMonitor" parameterType="string">
+    	delete from ip_scheduletask_monitor where zj=#{zj}
+    </delete>
+	
+  	<select id="getAllCount" resultType="int" >
+        select count(*) from ip_scheduletask_monitor 
+    </select>
+    
+    <select id="getErrorList" resultType="string" >
+		SELECT DISTINCT RWKSSJ FROM ip_scheduletask_monitor WHERE  RWZT='1' 
+			<![CDATA[
+			AND #{bDate}< RWKSSJ AND #{eDate} > RWKSSJ
+	        ]]>
+    </select>
+    
+    <select id="findAll" resultMap="scheduleTaskMonitorVO_result">
+   	SELECT 
+		ZJ,
+		RWBM,
+		RWMC,
+		JHZXSJ,
+		RWKSSJ,
+		RWJSSJ,
+		RWZT,
+		RWXH,
+		BZ
+	FROM ip_scheduletask_monitor 
+    </select>
+    
+    <select id="findCurPage" resultMap="scheduleTaskMonitorVO_result">
+		SELECT * FROM ip_scheduletask_monitor where 1=1 
+        <if test="rwmc != null and rwmc != ''"> 
+        	and RWMC like ${rwmc}
+        </if>
+        <if test="rwxh != null and rwxh  != ''"> 
+        	and RWXH = #{rwxh}
+        </if>
+        <if test="rwbm != null and rwbm  != ''"> 
+        	and RWBM = #{rwbm}
+        </if>
+        <if test="startDate != null and startDate != ''"> 
+        <![CDATA[
+	        and RWKSSJ > #{startDate} 
+	        ]]>
+		</if>
+        <if test="endDate != null and endDate != ''"> 
+        <![CDATA[
+        	and RWKSSJ < #{endDate} 
+        	]]>
+        </if>
+         <if test="clickDateS != null and clickDateS != '' and clickDateE != null and clickDateE != ''"> 
+         <![CDATA[
+            and RWKSSJ > #{clickDateS} and RWKSSJ < #{clickDateE}
+         ]]>
+        </if>
+        <if test="rwzt != null and rwzt != ''"> 
+        		and  RWZT = #{rwzt}
+        </if>
+        order by RWKSSJ desc
+    </select>
+   
+     <select id="findCurPageCount" resultType="int">
+		SELECT count(*) FROM ip_scheduletask_monitor where 1=1 
+        <if test="rwmc != null and rwmc != ''"> 
+        	and RWMC like ${rwmc}
+        </if>
+         <if test="rwxh != null and rwxh  != ''"> 
+        	and RWXH = #{rwxh}
+        </if>
+        <if test="rwbm != null and rwbm  != ''"> 
+        	and RWBM = #{rwbm}
+        </if>
+       <if test="startDate != null and startDate != ''"> 
+        <![CDATA[
+	        and RWKSSJ > #{startDate} 
+	        ]]>
+		</if>
+        <if test="endDate != null and endDate != ''"> 
+        <![CDATA[
+        	and RWKSSJ < #{endDate} 
+        	]]>
+        </if>
+         <if test="clickDateS != null and clickDateS != '' and clickDateE != null and clickDateE != ''"> 
+         <![CDATA[
+            and RWKSSJ > #{clickDateS} and RWKSSJ < #{clickDateE}
+         ]]>
+        </if>
+         <if test="rwzt != null and rwzt != ''"> 
+        		and  RWZT = #{rwzt}
+        </if>
+    </select>
+    
+    <select id="findResultsByRwbm" resultMap="scheduleTaskMonitorVO_result">
+   		SELECT * FROM ip_scheduletask_monitor where 1 =1
+   		<if test="rwbm != null and rwbm != ''"> 
+        	and RWBM = #{rwbm}
+        </if>
+        <if test="pivot != null"> 
+        <![CDATA[
+        	and RWXH >= #{pivot}
+	        ]]>
+        </if>
+        	order by RWXH
+    </select>
+    
+    
+    <delete id="deletePlannedTaskItems" >
+   		delete from ip_scheduletask_monitor where RWBM = #{rwbm} 
+   		and RWZT='3'
+    <![CDATA[
+   		and  RWXH >= #{pivot} 
+	        ]]>
+    </delete>
+    
+    
+     <select id="findNextTaskPlannedByRwbm" resultMap="scheduleTaskMonitorVO_result">
+   		SELECT * FROM ip_scheduletask_monitor a WHERE a.rwbm =#{rwbm} AND a.rwzt='3' AND a.rwxh = #{rwxh}
+    </select>
+    
+    
+    
+    <delete id="monitorRecoderKeepDays" parameterType="java.sql.Timestamp">
+   		delete from ip_scheduletask_monitor where 
+   		<![CDATA[
+   		RWKSSJ < #{time} 
+	        ]]> 
+    </delete>
+    
+</mapper>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cib.cap4j.cfn.function.dao.IMenuMainDao">
+	<resultMap id="ipResrelationVO_result" type="com.cib.cap4j.cfn.function.vo.IpResrelationVO">
+        <id column="CDYZYGXZJ" property="cdyzygxzj" />
+        <result column="ZDXBM" property="zdxbm" />
+        <result column="ZDXLX" property="zdxlx" />
+        <result column="CDXBM" property="cdxbm" />
+        <result column="CDXLX" property="cdxlx" />
+   	</resultMap>
+   	<!-- 保存菜单关联URL -->
+   	<insert id="addMenuRelationUrl" parameterType="com.cib.cap4j.cfn.function.vo.IpResrelationVO">
+		INSERT INTO IP_RESRELATION(CDYZYGXZJ,ZDXBM,ZDXLX,CDXBM,CDXLX)
+		VALUES(#{cdyzygxzj},#{zdxbm},#{zdxlx},#{cdxbm},#{cdxlx})   	
+    </insert>
+    <!-- 删除菜单关联URL -->
+    <delete id="delMenuRelationUrl" parameterType="com.cib.cap4j.cfn.function.vo.IpResrelationVO">
+		DELETE FROM IP_RESRELATION
+		 WHERE ZDXBM = #{zdxbm}
+		   AND ZDXLX = #{zdxlx}
+    </delete>
+</mapper>

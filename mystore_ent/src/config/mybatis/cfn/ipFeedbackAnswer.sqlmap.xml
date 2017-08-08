@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cib.cap4j.cfn.feedback.dao.IIPFeedbackAnswerDao">
+	<resultMap id="feedbackAnswerVO_result" type="com.cib.cap4j.cfn.feedback.vo.IPFeedbackAnswerVO">
+        <id column="hfbh" property="hfbh" />
+        <result column="wtbh" property="wtbh" />
+        <result column="hffj" property="hffj" />
+        <result column="hfnr" property="hfnr" />
+        <result column="dapl" property="dapl" />
+        <result column="wthfr" property="wthfr" />
+        <result column="cjr" property="cjr" />
+        <result column="cjsj" property="cjsj" />
+        <result column="zhxgr" property="zhxgr" />
+        <result column="zhxgsj" property="zhxgsj" />
+        <result column="jlzt" property="jlzt" />
+        <result column="bz" property="bz" />
+    </resultMap>
+	
+  	<select id="getAllCount" resultType="int">
+        select count(*) from IP_FEEDBACK_ANSWER where JLZT = '1'
+    </select>
+    
+    <select id="findAll" resultMap="feedbackAnswerVO_result">
+        select * from IP_FEEDBACK_ANSWER where JLZT = '1'
+    </select>
+    
+    <select id="findByWtbh" resultMap="feedbackAnswerVO_result" parameterType="string">
+        select *
+        from IP_FEEDBACK_ANSWER
+        where JLZT = '1' and wtbh = #{id}
+    </select>
+    
+    <insert id="save" parameterType="com.cib.cap4j.cfn.feedback.vo.IPFeedbackAnswerVO">
+        INSERT INTO IP_FEEDBACK_ANSWER 
+        (hfbh, wtbh, hffj, hfnr, 
+        dapl, wthfr, cjr, cjsj, 
+        zhxgr, zhxgsj, jlzt, bz)
+		values 
+		(#{hfbh,jdbcType=VARCHAR}, #{wtbh,jdbcType=VARCHAR}, #{hffj,jdbcType=VARCHAR}, #{hfnr,jdbcType=VARCHAR}, 
+		#{dapl,jdbcType=VARCHAR}, #{wthfr,jdbcType=VARCHAR}, #{cjr,jdbcType=VARCHAR}, #{cjsj,jdbcType=TIMESTAMP}, 
+		#{zhxgr,jdbcType=VARCHAR}, #{zhxgsj,jdbcType=TIMESTAMP}, #{jlzt,jdbcType=VARCHAR}, #{bz,jdbcType=VARCHAR})
+    </insert>
+    
+    <update id="update" parameterType="com.cib.cap4j.cfn.feedback.vo.IPFeedbackAnswerVO">
+        update IP_FEEDBACK_ANSWER
+        	<set>
+				<if test="wtbh != null">wtbh = #{wtbh,jdbcType=VARCHAR},</if>
+				<if test="hffj != null">hffj = #{hffj,jdbcType=VARCHAR},</if>
+				<if test="hfnr != null">hfnr = #{hfnr,jdbcType=VARCHAR},</if>
+				<if test="dapl != null">dapl = #{dapl,jdbcType=VARCHAR},</if>
+				<if test="wthfr != null">wthfr = #{wthfr,jdbcType=VARCHAR},</if>
+				<if test="cjr != null">cjr = #{cjr,jdbcType=VARCHAR},</if>
+				<if test="cjsj != null">cjsj = #{cjsj,jdbcType=TIMESTAMP},</if>
+				<if test="zhxgr != null">zhxgr = #{zhxgr,jdbcType=VARCHAR},</if>
+				<if test="zhxgsj != null">zhxgsj = #{zhxgsj,jdbcType=TIMESTAMP},</if>
+				<if test="bz != null">bz = #{bz,jdbcType=VARCHAR},</if>
+				<if test="jlzt != null">JLZT = #{jlzt,jdbcType=VARCHAR}</if>
+			</set>
+        where wtbh = #{wtbh}
+    </update>
+
+    <update id="delete_logic" parameterType="java.util.HashMap">
+        update IP_FEEDBACK_ANSWER
+        	<set>
+        		JLZT = '0', zhxgr = #{zhxgr,jdbcType=VARCHAR}, zhxgsj = #{zhxgsj,jdbcType=TIMESTAMP}
+			</set>
+			where wtbh in
+			<foreach item="id" index="index" collection="idArr"
+				open="(" separator="," close=")">
+				#{id}
+			</foreach>
+    </update>
+    
+    <delete id="delete" parameterType="string">
+        delete from IP_FEEDBACK_ANSWER where wtbh in
+        <foreach item="item" index="index" collection="array"
+			open="(" separator="," close=")">
+			#{item}
+		</foreach>
+    </delete>
+</mapper>

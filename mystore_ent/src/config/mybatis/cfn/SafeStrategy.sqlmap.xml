@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cib.cap4j.cfn.safeStrategy.dao.ISafeStrategyGroupDao">
+		<resultMap id="ipSafeStrategyVO_result" type="com.cib.cap4j.cfn.safeStrategy.vo.IpArcsecurityStrategyVO">
+        <id column="AQCLZJ" property="aqclzj" />
+        <result column="AQCLMC" property="aqclmc" />
+        <result column="AQCLZ" property="aqclz" />
+        <result column="AQCLMS" property="aqclms" />
+        <result column="CJR" property="cjr" />
+        <result column="CJSJ" property="cjsj" />
+        <result column="ZHXGR" property="zhxgr" />
+        <result column="ZHXGSJ" property="zhxgsj" />
+        <result column="CTJJCL" property="ctjjcl" />
+        <result column="SFKKZ" property="sfkkz" />
+        <result column="JLZT" property="jlzt" />
+        </resultMap>
+		<resultMap id="ipStrategyGroupVO_result" type="com.cib.cap4j.cfn.safeStrategy.vo.IpStrategyGroupVO">
+        <id column="AQCLZZJ" property="aqclzzj" />
+        <result column="CLZ" property="clz" />
+        <result column="CLM" property="clm" />
+        <result column="CLZM" property="clzm" />
+        <result column="XGBZ" property="xgbz" />
+        <result column="SFWXTAQCLZ" property="sfwxtaqclz" />
+        <result column="PXH" property="pxh" />
+        <result column="CJSJ" property="cjsj" />
+        <result column="ZHXGZ" property="zhxgz" />
+        <result column="ZHXGSJ" property="zhxgsj" />
+        <result column="JLZT" property="jlzt" />
+        </resultMap>
+        <!-- 获取安全策略组值 -->
+        <select id="findSafeStrategyInfo" resultMap="ipSafeStrategyVO_result" >
+				select b.aqclmc,b.AQCLMS AAQCLMS,a.CLZ ACLZ,
+				(select D.CLZ
+				          from IP_STRATEGY_GROUP D
+				         where a.CLM = D.CLM
+				           and D.CLZM = '二级安全策略标准') BCLZ,
+				       (select E.CLZ
+				          from IP_STRATEGY_GROUP E
+				         where A.CLM = E.CLM
+				           and E.CLZM = '三级安全策略标准') CCLZ,
+				       (select F.CLZ
+				          from IP_STRATEGY_GROUP F
+				         where A.CLM = F.CLM
+				           and F.CLZM = '自定义安全策略') DCLZ
+				from ip_arcsecurity_strategy b, ip_strategy_group a
+				 WHERE a.CLM = b.AQCLMC 
+				   and a.CLZM = '一级安全策略标准'        	
+        order by AAQCLMS
+        </select>
+        <!-- 获取已启用的安全策略标准策略值 -->
+        <select id="findOpenSafeStrategy" resultType="hashmap" >
+			SELECT ISG.CLZM,IAS.AQCLMC,IAS.AQCLMS, ISG.CLZ
+			  FROM IP_ARCSECURITY_STRATEGY IAS, IP_STRATEGY_GROUP ISG
+			 WHERE IAS.AQCLMC = ISG.CLM
+			   AND ISG.SFWXTAQCLZ = '1'
+        </select>
+        <!-- 获取自定义安全策略标准默认值 -->
+        <select id="findDefaultSafeStrategy" resultMap="ipSafeStrategyVO_result" >
+			SELECT A.CLZM, B.AQCLMC, B.AQCLMS AAQCLMS, A.CLZ DCLZ
+			  FROM IP_ARCSECURITY_STRATEGY B, IP_STRATEGY_GROUP A
+			 WHERE A.CLM = B.AQCLMC
+			   AND A.CLZM = '自定义安全策略默认值'
+			 ORDER BY AAQCLMS
+        </select>
+        <!-- 关闭已启用的安全策略标准 -->
+        <update id="closeAlrSafeStrategy" parameterType="com.cib.cap4j.cfn.safeStrategy.vo.IpArcsecurityStrategyVO">
+			UPDATE IP_STRATEGY_GROUP SET SFWXTAQCLZ='0' WHERE SFWXTAQCLZ='1'
+        </update>
+        <!-- 启用用户选择的安全策略标准 -->
+        <update id="openSafeStrategy" parameterType="com.cib.cap4j.cfn.safeStrategy.vo.IpArcsecurityStrategyVO">
+			UPDATE IP_STRATEGY_GROUP SET SFWXTAQCLZ='1'WHERE CLZM= #{clzm}
+        </update>
+        <!-- 更新自定义安全策略标准值 -->
+        <update id="updateSafeStrategy" parameterType="java.util.HashMap">
+			UPDATE IP_STRATEGY_GROUP SET CLZ= #{clz} WHERE CLZM='自定义安全策略' AND CLM= #{clm}
+        </update>
+</mapper>        

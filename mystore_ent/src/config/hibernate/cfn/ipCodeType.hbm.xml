@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="com.cib.cap4j.cfn.codeType.vo">
+	<class name="IPCodeTypeVO" table="IP_CODETYPE">
+		<id name="zj" column="ZJ"/>
+		<property name="sjlxbh" column="SJLXBH"/>
+		<property name="sjlxmc" column="SJLXMC"/>
+		<property name="sjlxms" column="SJLXMS"/>
+		<property name="pxh" column="PXH"/>
+		<property name="jlzt" column="JLZT"/>
+		<property name="sfzccj" column="SFZCCJ"/>
+		
+		<set name="infos" cascade="all" table="IP_CODEINFO" lazy="extra" inverse="true">
+		    <key column="SJLX" />
+		    <one-to-many class="com.cib.cap4j.cfn.codeInfo.vo.IPCodeInfoVO"></one-to-many>
+		</set>
+	</class>
+</hibernate-mapping>

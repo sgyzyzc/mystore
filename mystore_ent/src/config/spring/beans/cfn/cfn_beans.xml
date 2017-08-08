@@ -1,0 +1,298 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:aop="http://www.springframework.org/schema/aop" 
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:p="http://www.springframework.org/schema/p" 
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:jee="http://www.springframework.org/schema/jee"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd  
+    http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd  
+    http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.0.xsd  
+    http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.0.xsd
+    http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee-4.0.xsd">
+	
+	<!-- security -->
+	<bean id="cap4jCfnUserDetailsDaoImpl" class="com.cib.cap4j.cfn.security.dao.impl.Cap4jCfnUserDetailsDaoImpl">
+	</bean>
+	<bean id="cap4jCfnSecurityMetadataSourceDaoImpl" class="com.cib.cap4j.cfn.security.dao.impl.Cap4jCfnSecurityMetadataSourceDaoImpl">
+	</bean>
+	
+	<!-- 系统登录Service -->
+	<bean id="loginServiceImpl" class="com.cib.cap4j.cfn.common.login.service.impl.LoginServiceImpl">
+	</bean>
+	
+	<!-- 公告信息Service -->
+	<bean id="ipInformationServiceImpl" class="com.cib.cap4j.cfn.information.service.impl.IPInformationServiceImpl">
+		<property name="ipInformationDao" ref="ipInformationDaoImpl"/>
+	</bean>
+	<bean id="ipInformationDaoImpl" class="com.cib.cap4j.cfn.information.dao.impl.IPInformationDaoImpl">
+	</bean>
+	
+	<!-- 功能设置Service -->
+	<bean id="functionMainServiceImpl" class="com.cib.cap4j.cfn.function.service.impl.FunctionMainServiceImpl">
+		<property name="iFunctionMainDao" ref="ifunctionMainDaoImpl"/>
+	</bean>
+	<bean id="ifunctionMainDaoImpl" class="com.cib.cap4j.cfn.function.dao.impl.IFunctionMainDaoImpl">
+	</bean>
+	
+	<!-- URL设置Service -->
+	<bean id="urlServiceImpl" class="com.cib.cap4j.cfn.function.service.impl.UrlServiceImpl">
+		<property name="iUrlInfoDao" ref="iUrlInfoDaoImpl"/>
+		<property name="ipArcGrantDao" ref ="ipArcGrantDaoImpl"/>
+		<property name="iMenuMainDao" ref="iMenuMainDaoImpl"/>
+	</bean>
+	<bean id="iUrlInfoDaoImpl" class="com.cib.cap4j.cfn.function.dao.impl.IUrlInfoDaoImpl">
+	</bean>
+
+	<!-- 角色信息管理Service -->
+	<bean id="ipRoleServiceImpl" class="com.cib.cap4j.cfn.role.service.impl.IPRoleServiceImpl">
+		<property name="ipRoleDao" ref="ipRoleDaoImpl"/>
+		<property name="ipStaffService" ref="ipStaffServiceImpl"/>
+	</bean>
+	<bean id="ipRoleDaoImpl" class="com.cib.cap4j.cfn.role.dao.impl.IPRoleDaoImpl">
+	</bean>
+	
+	<!-- 用户信息管理Service -->
+	<bean id="ipStaffServiceImpl" class="com.cib.cap4j.cfn.staff.service.impl.IPStaffServiceImpl">
+		<property name="ipStaffDao" ref="ipStaffDaoImpl"/>
+		<property name="ipArcUserAuthDao" ref="ipArcUserAuthDaoImpl"/>
+		<property name="ipDataPermissionDao" ref="ipDataPermissionDaoImpl"/>
+		<property name="ipMetadataPermissionDao" ref="ipMetadataPermissionDaoImpl"/>
+		<property name="ipStaffCIDao" ref="ipStaffCIDaoImpl"/>
+		<property name="unitPermissionManageDao" ref="unitPermissionManageDaoImpl"/>
+		<property name="iMenuMainDao" ref="iMenuMainDaoImpl"/>
+		<property name="ipArcPwdHistDao" ref="ipArcPwdHistDaoImpl"/>
+		<property name="iUrlInfoDao" ref="iUrlInfoDaoImpl"/>
+		<property name="safeStrategyGroupService" ref="safeStrategyGroupServiceImpl"/>
+		<property name="passwordEncryptionDriver" ref="passwordEncryptionDriverImpl"/>
+		<property name="ipRoleStaffService" ref="ipRoleStaffServiceImpl"/>
+	</bean>
+	<bean id="ipStaffDaoImpl" class="com.cib.cap4j.cfn.staff.dao.impl.IPStaffDaoImpl">
+	</bean>
+	<bean id="ipRoleStaffDaoImpl" class="com.cib.cap4j.cfn.rolestaff.dao.impl.IPRoleStaffDaoImpl">
+	</bean>
+	<bean id="ipArcGrantDaoImpl" class="com.cib.cap4j.cfn.grant.dao.impl.IPArcGrantDaoImpl">
+	</bean>
+	<!-- 用户登录 Service -->
+	<bean id="ipArcUserAuthServiceImpl" class="com.cib.cap4j.cfn.common.arcuserauth.service.impl.IPArcUserAuthServiceImpl">
+		<property name="ipArcUserAuthDao" ref="ipArcUserAuthDaoImpl"/>
+	</bean>
+	<bean id="ipArcUserAuthDaoImpl" class="com.cib.cap4j.cfn.common.arcuserauth.dao.impl.IPArcUserAuthDaoImpl">
+	</bean>
+	
+	<!-- 字段集合管理Service -->
+	<bean id="ipDataPermissionServiceImpl" class="com.cib.cap4j.cfn.dataManage.service.impl.IpDataPermissionServiceImpl">
+		<property name="ipDataPermissionDao" ref="ipDataPermissionDaoImpl"/>
+		<property name="ipMetadataPermissionDao" ref="ipMetadataPermissionDaoImpl"/>
+	</bean>
+	<bean id="ipDataPermissionDaoImpl" class="com.cib.cap4j.cfn.dataManage.dao.impl.IpDataPermissionDaoImpl">
+	</bean>	
+	<bean id="ipMetadataPermissionDaoImpl" class="com.cib.cap4j.cfn.dataManage.dao.impl.IpMetadataPermissionDaoImpl">
+	</bean>
+	
+	<!-- 组织机构的数据权限 -->
+	<bean id="unitPermissionManageServiceImpl" class="com.cib.cap4j.cfn.unitPermissionManage.service.impl.UnitPermissionManageServiceImpl">
+		<property name="ipUnitDao" ref="ipUnitDaoImpl"/>
+		<property name="unitPermissionManageDao" ref="unitPermissionManageDaoImpl"/>
+		<property name="ipUnitService" ref="ipUnitServiceImpl"/>
+	</bean>
+	<bean id="unitPermissionManageDaoImpl" class="com.cib.cap4j.cfn.unitPermissionManage.dao.impl.UnitPermissionManageDaoImpl">
+	</bean>
+	
+	<!-- 菜单设置Service -->
+	<bean id="menuMainServiceImpl" class="com.cib.cap4j.cfn.function.service.impl.MenuMainServiceImpl">
+		<property name="iMenuMainDao" ref="iMenuMainDaoImpl"/>
+	</bean>
+	<bean id="iMenuMainDaoImpl" class="com.cib.cap4j.cfn.function.dao.impl.IMenuMainDaoImpl">
+	</bean>
+			
+	<!-- 公共权限 -->
+	<bean id="commonPermissionServiceImpl" class="com.cib.cap4j.cfn.commonPermission.service.impl.CommonPermissionServiceImpl">
+		<property name="iUrlService" ref="urlServiceImpl"/>
+		<property name="iMenuMainService" ref="menuMainServiceImpl"/>
+		<property name="ipAuditlogService" ref="ipAuditlogServiceImpl"/>
+		<property name="iCommonPermissionDao" ref="commonPermissionDaoImpl"/>
+		<property name="iRoleAssignPermissionDao" ref="roleAssignPermissionDaoImpl"/>
+		<property name="iMenuMainDao" ref="iMenuMainDaoImpl"/>
+	</bean>
+	<bean id="commonPermissionDaoImpl" class="com.cib.cap4j.cfn.commonPermission.dao.impl.CommonPermissionDaoImpl">
+	</bean>
+	
+	<!-- 角色分配权限 -->
+	<bean id="roleAssignPermissionServiceImpl" class="com.cib.cap4j.cfn.permissionRelation.service.impl.RoleAssignPermissionServiceImpl">
+		<property name="iUrlService" ref="urlServiceImpl"/>
+		<property name="iMenuMainService" ref="menuMainServiceImpl"/>
+		<property name="ipAuditlogService" ref="ipAuditlogServiceImpl"/>
+		<property name="iCommonPermissionDao" ref="commonPermissionDaoImpl"/>
+		<property name="iCommonPermissionService" ref="commonPermissionServiceImpl"/>
+		<property name="iRoleAssignPermissionDao" ref="roleAssignPermissionDaoImpl"/>
+		<property name="iPerRelationRoleDao" ref="perRelationRoleDaoImpl"/>
+		<property name="ipDataPermissionDao" ref="ipDataPermissionDaoImpl"/>
+		<property name="unitPermissionManageDao" ref="unitPermissionManageDaoImpl"/>
+	</bean>	
+	<bean id="roleAssignPermissionDaoImpl" class="com.cib.cap4j.cfn.permissionRelation.dao.impl.RoleAssignPermissionDaoImpl">
+	</bean>
+	
+	<!-- 权限添加角色 -->
+	<bean id="perRelationRoleServiceImpl" class="com.cib.cap4j.cfn.permissionRelation.service.impl.PerRelationRoleServiceImpl">
+		<property name="iPerRelationRoleDao" ref="perRelationRoleDaoImpl"/>
+		<property name="iMenuMainDao" ref="iMenuMainDaoImpl"/>
+		<property name="iCommonPermissionDao" ref="commonPermissionDaoImpl"/>
+		<property name="iCommonPermissionService" ref="commonPermissionServiceImpl"/>
+		<property name="ipAuditlogService" ref="ipAuditlogServiceImpl"/>
+	</bean>	
+	<bean id="perRelationRoleDaoImpl" class="com.cib.cap4j.cfn.permissionRelation.dao.impl.PerRelationRoleDaoImpl">
+	</bean>
+	
+	
+	<!-- 安全策略组 -->
+	<bean id="safeStrategyGroupServiceImpl" class="com.cib.cap4j.cfn.safeStrategy.service.impl.SafeStrategyGroupServiceImpl">
+		<property name="iSafeStrategyGroupDao" ref="safeStrategyGroupDaoImpl"/>
+	</bean>	
+	<bean id="safeStrategyGroupDaoImpl" class="com.cib.cap4j.cfn.safeStrategy.dao.impl.SafeStrategyGroupDaoImpl">
+	</bean>
+	
+		
+	<!-- 文件上传Service -->
+	<bean id="ipUploadFileInfoServiceImpl" class="com.cib.cap4j.cfn.common.upload.service.impl.IPUploadFileInfoServiceImpl">
+		<property name="ipUploadFileInfoDao" ref="ipUploadFileInfoDaoImpl"/>
+	</bean>
+	<bean id="ipUploadFileInfoDaoImpl" class="com.cib.cap4j.cfn.common.upload.dao.impl.IPUploadFileInfoDaoImpl">
+	</bean>
+	
+	<!-- 在线用户监控Service -->
+	<bean id="ipOnlineServiceImpl" class="com.cib.cap4j.cfn.online.service.impl.IPOnlineServiceImpl">
+		<property name="ipOnlineDao" ref="ipOnlineDaoImpl"/>
+		<property name="ipHistoryOnlineService" ref="ipHistoryOnlineServiceImpl"/>
+	</bean>
+	<bean id="ipOnlineDaoImpl" class="com.cib.cap4j.cfn.online.dao.impl.IPOnlineDaoImpl">
+	</bean>
+	
+	<!-- 在线用户历史记录 -->
+	<bean id="ipHistoryOnlineServiceImpl" class="com.cib.cap4j.cfn.online.service.impl.IPHistoryOnlineServiceImpl">
+		<property name="ipHistoryOnlineDao" ref="ipHistoryOnlineDaoImpl"/>
+		<property name="ipOnlineDao" ref="ipOnlineDaoImpl"/>
+	</bean>
+	<bean id="ipHistoryOnlineDaoImpl" class="com.cib.cap4j.cfn.online.dao.impl.IPHistoryOnlineDaoImpl">
+	</bean>
+	
+	<!-- 反馈问题Service -->
+	<bean id="ipFeedbackQuestionServiceImpl" class="com.cib.cap4j.cfn.feedback.service.impl.IPFeedbackQuestionServiceImpl">
+		<property name="ipFeedbackQuestionDao" ref="ipFeedbackQuestionDaoImpl"/>
+	</bean>
+	<bean id="ipFeedbackQuestionDaoImpl" class="com.cib.cap4j.cfn.feedback.dao.impl.IPFeedbackQuestionDaoImpl">
+	</bean>
+	
+	<!-- 反馈回复Service -->
+	<bean id="ipFeedbackAnswerServiceImpl" class="com.cib.cap4j.cfn.feedback.service.impl.IPFeedbackAnswerServiceImpl">
+		<property name="ipFeedbackAnswerDao" ref="ipFeedbackAnswerDaoImpl"/>
+	</bean>
+	<bean id="ipFeedbackAnswerDaoImpl" class="com.cib.cap4j.cfn.feedback.dao.impl.IPFeedbackAnswerDaoImpl">
+	</bean>
+	
+	<!-- 用户信息流水操作Service -->
+	<bean id="ipStaffCIServiceImpl" class="com.cib.cap4j.cfn.ci.service.impl.IPStaffCIServiceImpl">
+		<property name="ipStaffCIDao" ref="ipStaffCIDaoImpl"/>
+		<property name="ipUnitService" ref="ipUnitServiceImpl"/>
+		<property name="ipStaffService" ref="ipStaffServiceImpl"/>
+	</bean>
+	<bean id="ipStaffCIDaoImpl" class="com.cib.cap4j.cfn.ci.dao.impl.IPStaffCIDaoImpl">
+	</bean>
+	
+	<!-- 角色信息流水操作Service -->
+	<bean id="ipRoleCIServiceImpl" class="com.cib.cap4j.cfn.ci.service.impl.IPRoleCIServiceImpl">
+		<property name="ipRoleCIDao" ref="ipRoleCIDaoImpl"/>
+	</bean>
+	<bean id="ipRoleCIDaoImpl" class="com.cib.cap4j.cfn.ci.dao.impl.IPRoleCIDaoImpl">
+	</bean>
+	
+	<!-- 用户角色关系Service -->
+	<bean id="ipRoleStaffServiceImpl" class="com.cib.cap4j.cfn.rolestaff.service.impl.IPRoleStaffServiceImpl">
+		<property name="ipRoleStaffDao" ref="ipRoleStaffDaoImpl"/>
+		<property name="ipRoleStaffCIDao" ref="ipRoleStaffCIDaoImpl"/>
+	</bean>
+	
+	<!-- 用户角色关系流水操作Service -->
+	<bean id="ipRoleStaffCIServiceImpl" class="com.cib.cap4j.cfn.ci.service.impl.IPRoleStaffCIServiceImpl">
+		<property name="ipRoleStaffCIDao" ref="ipRoleStaffCIDaoImpl"/>
+		<property name="ipUnitService" ref="ipUnitServiceImpl"/>
+	</bean>
+	<bean id="ipRoleStaffCIDaoImpl" class="com.cib.cap4j.cfn.ci.dao.impl.IPRoleStaffCIDaoImpl">
+	</bean>
+	<!-- 功能统计Service -->
+	<bean id="ipAccessMonitorServiceImpl" class="com.cib.cap4j.cfn.accessMonitor.service.impl.IPAccessMonitorServiceImpl">
+		<property name="ipAccessMonitorDao" ref="ipAccessMonitorDaoImpl"/>
+	</bean>
+	<bean id="ipAccessMonitorDaoImpl" class="com.cib.cap4j.cfn.accessMonitor.dao.impl.IPAccessMonitorDaoImpl">
+	</bean>
+	<!-- 审计日志Service -->
+	<bean id="ipAuditlogServiceImpl" class="com.cib.cap4j.cfn.auditlog.service.impl.IPAuditlogServiceImpl">
+		<property name="ipAuditlogDao" ref="ipAuditlogDaoImpl"/>
+		<property name="directoryService" ref="directoryService"/>
+		<property name="safeStrategyGroupService" ref="safeStrategyGroupServiceImpl"/>
+		<property name="ipCodeInfoService" ref="ipCodeInfoServiceImpl"/>
+	</bean>
+	<bean id="ipAuditlogDaoImpl" class="com.cib.cap4j.cfn.auditlog.dao.impl.IPAuditlogDaoImpl">
+	</bean>
+	
+	<bean id="ipCodeInfoServiceImpl" class="com.cib.cap4j.cfn.codeInfo.service.impl.IPCodeInfoServiceImpl">
+		<property name="ipCodeInfoDao" ref="ipCodeInfoDaoImpl"/>
+		<property name="ipCodeTypeService" ref="ipCodeTypeServiceImpl"/>
+	</bean>
+	<bean id="ipCodeInfoDaoImpl" class="com.cib.cap4j.cfn.codeInfo.dao.impl.IPCodeInfoDaoImpl">
+	</bean>
+	
+	<bean id="ipCodeTypeServiceImpl" class="com.cib.cap4j.cfn.codeType.service.impl.IPCodeTypeServiceImpl">
+		<property name="ipCodeInfoDao" ref="ipCodeInfoDaoImpl"/>
+		<property name="ipCodeTypeDao" ref="ipCodeTypeDaoImpl"/>
+	</bean>
+	<bean id="ipCodeTypeDaoImpl" class="com.cib.cap4j.cfn.codeType.dao.impl.IPCodeTypeDaoImpl">
+	</bean>
+	<!-- 应用日志Service -->
+	<bean id="iLog4jConfigServiceImpl" class="com.cib.cap4j.cfn.log4jconfig.service.impl.Log4jConfigServiceImpl"/>
+	<!-- 组织机构Service -->
+	<bean id="ipUnitServiceImpl" class="com.cib.cap4j.cfn.unit.service.impl.IPUnitServiceImpl">
+		<property name="ipUnitDao" ref="ipUnitDaoImpl"/>
+		<property name="ipStaffDao" ref="ipStaffDaoImpl"/>
+		<property name="ipStaffService" ref="ipStaffServiceImpl"/>
+		<property name="ipUnitCIDao" ref="ipUnitCIDaoImpl"/>
+		<property name="directoryService" ref="directoryService"/>
+	</bean>
+	<bean id="ipUnitDaoImpl" class="com.cib.cap4j.cfn.unit.dao.impl.IPUnitDaoImpl">
+	</bean>
+	<!-- 组织机构流水Service -->
+	<bean id="ipUnitCIServiceImpl" class="com.cib.cap4j.cfn.unit.service.impl.IPUnitCIServiceImpl">
+		<property name="ipUnitCIDao" ref="ipUnitCIDaoImpl"/>
+		<property name="ipUnitService" ref="ipUnitServiceImpl"/>
+	</bean>
+	<bean id="ipUnitCIDaoImpl" class="com.cib.cap4j.cfn.unit.dao.impl.IPUnitCIDaoImpl">
+	</bean>
+	
+	<bean id="ipArcPwdHistServiceImpl" class="com.cib.cap4j.cfn.common.arcuserauth.service.impl.IPArcPwdHistServiceImpl">
+		<property name="ipArcPwdHistDao" ref="ipArcPwdHistDaoImpl"/>
+	</bean>
+	<bean id="ipArcPwdHistDaoImpl" class ="com.cib.cap4j.cfn.common.arcuserauth.dao.impl.IPArcPwdHistDaoImpl">
+	</bean>
+	<bean id="cap4jSessionServiceImpl" class="com.cib.cap4j.cfn.security.session.service.impl.Cap4jSessionServiceImpl"/>
+	
+	<bean id="passwordEncryptionDriverImpl" class="com.cib.cap4j.cfn.common.password.impl.PasswordEncryptionDriverImpl">
+		<property name="passwordEncoder" ref="md5PasswordEncoder"/>
+	</bean>
+	<bean id="md5PasswordEncoder" class ="org.springframework.security.authentication.encoding.Md5PasswordEncoder">
+	</bean>
+	<!-- 日期+序号的主键生成实现类 -->
+	<bean id="cfnDateKeyGeneratorDaoImpl" class="com.cib.cap4j.cfn.common.keygenerater.dao.impl.CfnDateKeyGeneratorDaoImpl">
+		<property name="dataSource" ref="dataSourceWapper"/>
+	</bean>
+	<bean id="cfnDateKeyGeneratorServiceImpl" class="com.cib.cap4j.cfn.common.keygenerater.service.impl.CfnDateKeyGeneratorServiceImpl"/>
+	<!-- 获取码表值通用实现类 -->
+	<bean id="codeTypeService" class="com.cib.cap4j.cfn.codeType.service.impl.CfnCodeTypeServiceImpl"/>
+	<!-- DSM Service -->
+	<bean id="encryptService" class="com.cib.cap4j.cfn.encrypt.service.impl.DocumentEncryptGroupServiceImpl">
+		<property name="dsmStaffDao" ref="dsmStaffDaoImpl"/>
+		<property name="documentEncryptGroupDao" ref="documentEncryptGroupDaoImpl"/>
+	</bean>
+	<bean id="dsmStaffDaoImpl" class="com.cib.cap4j.cfn.encrypt.dao.impl.IpDsmStaffDaoImpl" />
+	<bean id="documentEncryptGroupDaoImpl" class="com.cib.cap4j.cfn.encrypt.dao.impl.DocumentEncryptGroupDaoImpl"/>
+</beans>

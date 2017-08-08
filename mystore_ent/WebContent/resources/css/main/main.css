@@ -1,0 +1,44 @@
+.header{
+	height:40px;
+}
+
+ul.m_op {
+    padding-top: 0px;
+    height: 1%;
+    margin: 0;
+}
+
+ul.m_op li {
+    list-style: none;
+    padding-right: 18px;
+    float: left;
+}
+
+ul.m_op li a {
+    display: block;
+    padding: 2px 0 0 25px;
+    background-image: url( main-head_ico.png );
+    background-repeat: no-repeat;
+    text-decoration: none;
+    color: #006699;
+}
+
+ul.m_op li a:hover {
+    text-decoration: underline;
+    color: #f00;
+}
+
+a.m_op_lk_1 {
+    background-position: 0 0;
+}
+
+a.m_op_lk_2 {
+    background-position: 0 -32px;
+}
+
+a.m_op_lk_3 {
+    background-position: 0 -62px;
+}
+a.m_op_lk_4 {
+    background-position: 0 -92px;
+}

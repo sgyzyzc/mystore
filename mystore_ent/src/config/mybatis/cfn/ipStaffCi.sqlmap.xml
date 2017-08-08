@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cib.cap4j.cfn.ci.dao.IIPStaffCIDao">
+	<resultMap id="ipStaffCi_result" type="com.cib.cap4j.cfn.ci.vo.IPStaffCIVO">
+	     <id column="ZJ" property="zj" />
+	     <result column="YHBH" property="yhbh" />
+	     <result column="YHMC" property="yhmc" />
+	     <result column="SSJG" property="ssjg" />
+	     <result column="SSZZDY" property="sszzdy" />
+	     <result column="YHLX" property="yhlx" />
+	     <result column="ZT" property="zt" />
+	     <result column="SFZH" property="sfzh" />
+	     <result column="SR" property="sr" />
+	     <result column="XB" property="xb" />
+	     <result column="DHHM" property="dhhm" />
+	     <result column="YJ" property="yj" />
+	     <result column="DZ" property="dz" />
+	     <result column="SDSJ" property="sdsj" />
+	     <result column="YHDLM" property="yhdlm" />
+	     <result column="NOTESID" property="notesid" />
+	     <result column="CJR" property="cjr" />
+	     <result column="CJSJ" property="cjsj" />
+	     <result column="ZHXGR" property="zhxgr" />
+	     <result column="ZHXGSJ" property="zhxgsj" />
+	     <result column="JLZT" property="jlzt" />
+	     <result column="CZR" property="czr" />
+	     <result column="CZSJ" property="czsj" />
+	     <result column="CZLX" property="czlx" />
+	     <result column="KZZD1" property="kzzd1" />
+	     <result column="KZZD2" property="kzzd2" />
+	     <result column="KZZD3" property="kzzd3" />
+	     <result column="KZZD4" property="kzzd4" />
+	     <result column="KZZD5" property="kzzd5" />
+	     <result column="KZZD6" property="kzzd6" />
+	     <result column="KZZD7" property="kzzd7" />
+	     <result column="KZZD8" property="kzzd8" />
+	     <result column="KZZD9" property="kzzd9" />
+	     <result column="KZZD10" property="kzzd10" />
+	</resultMap>
+		
+	 <select id="findAll" resultMap="ipStaffCi_result" parameterType="java.util.Map">
+    	SELECT S.*, U.JGMC AS SSJGMC, t.YHMC AS CZRXM, F.YHMC AS FHRXM FROM IP_UNIT U, IP_STAFF T, IP_STAFF_CI S LEFT JOIN IP_STAFF F
+    	 ON S.FHRY=F.YHBH
+    	 WHERE S.CZR = T.YHBH AND S.SSJG=U.ZJ
+    	<if test="notesid != null and notesid !=''">  AND S.NOTESID LIKE ${notesid}</if>
+     	<if test="yhmc != null and yhmc !=''">  AND S.YHMC LIKE ${yhmc}</if>
+     	<if test="czrxm != null and czrxm !=''">  AND T.YHMC LIKE ${czrxm}</if>
+     	<if test="czlx != null and czlx !=''">  AND S.CZLX = #{czlx}</if>
+       	<if test="userUnit != null and userUnit == '999999999'">  AND U.ZJ = #{userUnit}</if>
+       	<if test="userUnit != null and userUnit != '999999999'">  AND (U.XZCXLJ LIKE ${userUnit} OR U.ZJ = #{defaultUnit})</if>
+       	<if test="kzzd1 != null and kzzd1 != ''">  AND S.KZZD1 LIKE ${kzzd1}</if>
+       	<if test="kzzd2 != null and kzzd2 != ''">  AND S.KZZD2 LIKE ${kzzd2}</if>
+       	<if test="kzzd3 != null and kzzd3 != ''">  AND S.KZZD3 LIKE ${kzzd3}</if>
+       	<if test="kzzd4 != null and kzzd4 != ''">  AND S.KZZD4 LIKE ${kzzd4}</if>
+       	<if test="kzzd5 != null and kzzd5 != ''">  AND S.KZZD5 LIKE ${kzzd5}</if>
+       	<if test="kzzd6 != null and kzzd6 != ''">  AND S.KZZD6 LIKE ${kzzd6}</if>
+       	<if test="kzzd7 != null and kzzd7 != ''">  AND S.KZZD7 LIKE ${kzzd7}</if>
+       	<if test="kzzd8 != null and kzzd8 != ''">  AND S.KZZD8 LIKE ${kzzd8}</if>
+       	<if test="kzzd9 != null and kzzd9 != ''">  AND S.KZZD9 LIKE ${kzzd9}</if>
+       	<if test="kzzd10 != null and kzzd10 != ''">  AND S.KZZD10 LIKE ${kzzd10}</if>
+       	ORDER BY CZSJ DESC
+    </select>
+ 		
+	 <select id="countAll" resultType="int" parameterType="java.util.Map">
+    	SELECT COUNT(*) FROM IP_STAFF_CI S, IP_UNIT U, IP_STAFF T
+    	 WHERE S.CZR = T.YHBH AND S.SSJG=U.ZJ 
+    	<if test="notesid != null and notesid !=''">  AND S.NOTESID LIKE ${notesid}</if>
+     	<if test="yhmc != null and yhmc !=''">  AND S.YHMC LIKE ${yhmc}</if>
+     	<if test="czrxm != null and czrxm !=''">  AND T.YHMC LIKE ${czrxm}</if>
+     	<if test="czlx != null and czlx !=''">  AND S.CZLX = #{czlx}</if>
+       	<if test="userUnit != null and userUnit == '999999999'">  AND U.ZJ = #{userUnit}</if>
+       	<if test="userUnit != null and userUnit != '999999999'">  AND (U.XZCXLJ LIKE ${userUnit} OR U.ZJ = #{defaultUnit})</if>
+       	<if test="kzzd1 != null and kzzd1 != ''">  AND S.KZZD1 LIKE ${kzzd1}</if>
+       	<if test="kzzd2 != null and kzzd2 != ''">  AND S.KZZD2 LIKE ${kzzd2}</if>
+       	<if test="kzzd3 != null and kzzd3 != ''">  AND S.KZZD3 LIKE ${kzzd3}</if>
+       	<if test="kzzd4 != null and kzzd4 != ''">  AND S.KZZD4 LIKE ${kzzd4}</if>
+       	<if test="kzzd5 != null and kzzd5 != ''">  AND S.KZZD5 LIKE ${kzzd5}</if>
+       	<if test="kzzd6 != null and kzzd6 != ''">  AND S.KZZD6 LIKE ${kzzd6}</if>
+       	<if test="kzzd7 != null and kzzd7 != ''">  AND S.KZZD7 LIKE ${kzzd7}</if>
+       	<if test="kzzd8 != null and kzzd8 != ''">  AND S.KZZD8 LIKE ${kzzd8}</if>
+       	<if test="kzzd9 != null and kzzd9 != ''">  AND S.KZZD9 LIKE ${kzzd9}</if>
+       	<if test="kzzd10 != null and kzzd10 != ''">  AND S.KZZD10 LIKE ${kzzd10}</if>
+    </select>
+    
+    <update id="updateFhzt" parameterType="com.cib.cap4j.cfn.ci.vo.IPStaffCIVO">
+    	UPDATE IP_STAFF_CI
+     	<set>
+     		FHZT = #{fhzt},
+     		FHRY = #{fhry},
+     	    FHSJ = #{fhsj}
+     	</set>
+     	WHERE ZJ = #{zj}
+    </update>
+    
+     <select id="countUnverified" resultType="int" parameterType="java.lang.String">
+     	SELECT COUNT(*) FROM IP_STAFF_CI WHERE YHBH = #{_parameter} AND FHZT = '0'
+     </select>
+     
+     <select id="findNotFHCount" resultType="int" parameterType="java.lang.String">
+     	SELECT COUNT(*) FROM IP_STAFF_CI WHERE FHZT = #{FHZT}
+     </select>
+     
+     <select id="hasRecordByAction" resultType="int" parameterType="java.util.Map">
+     	SELECT COUNT(*) FROM IP_STAFF_CI WHERE FHZT = #{FHZT} AND CZLX = #{CZLX} AND YHBH = #{YHBH}
+     </select>
+    
+</mapper>		

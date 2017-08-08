@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="com.cib.cap4j.cfn.unitPermissionManage.vo">
+	<class name="IpUnitPermissionVO" table="IP_UNIT_PERMISSION">
+		<id name="zzjgqxzj" column="zzjgqxzj"/>
+		<property name="zzqxbm" column="zzqxbm"/>
+		<property name="zzqxmc" column="zzqxmc"/>	
+		<property name="ssmk" column="ssmk"/>
+		<property name="qxfx" column="qxfx"/>
+		<property name="zzjgbc" column="zzjgbc"/>
+		<property name="tj" column="tj"/>
+		<property name="sfbhzj" column="sfbhzj"/>
+	</class>
+</hibernate-mapping>

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cib.cap4j.cfn.dao.IpDsmStaffDao">
+	<resultMap type="com.cib.cap4j.cfn.encrypt.vo.IpDsmStaffVO"
+		id="IpDsmStaffVOMap">
+		<id column="ZJ" property="zj" jdbcType="VARCHAR" />
+		<result column="YHBH" property="yhbh" jdbcType="CHAR" />
+		<result column="QXZJ" property="qxzj" jdbcType="CHAR" />
+		<result column="JLZT" property="jlzt" jdbcType="CHAR" />
+		<result column="CJR" property="cjr" jdbcType="CHAR" />
+		<result column="CJSJ" property="cjsj" jdbcType="TIMESTAMP" />
+		<result column="ZHXGR" property="zhxgr" jdbcType="VARCHAR" />
+		<result column="ZHXGSJ" property="zhxgsj" jdbcType="TIMESTAMP" />
+	</resultMap>
+
+	<insert id="save" parameterType="com.cib.cap4j.cfn.encrypt.vo.IpDsmStaffVO">
+		insert into
+		IP_DSM_STAFF ( ZJ, YHBH, QXZJ, JLZT, CJR, CJSJ, ZHXGR, ZHXGSJ)
+		values (
+		#{zj, jdbcType=VARCHAR}
+		,#{yhbh, jdbcType=CHAR}
+		,#{qxzj, jdbcType=CHAR}
+		,#{jlzt, jdbcType=CHAR}
+		,#{cjr, jdbcType=CHAR}
+		,#{cjsj, jdbcType=TIMESTAMP}
+		,#{zhxgr, jdbcType=VARCHAR}
+		,#{zhxgsj, jdbcType=TIMESTAMP}
+		)
+	</insert>
+    
+	<delete id="deleteByGroupId" parameterType="String">
+		delete from IP_DSM_STAFF where QXZJ = #{qxzj}
+	</delete>
+	
+	<delete id="deleteByGroupIdAndStaff" parameterType="java.util.Map">
+		delete from IP_DSM_STAFF where QXZJ = #{qxzj} AND YHBH = #{yhbh}
+	</delete>
+	
+	<!-- 查询用户编号是否已存在 -->
+	<select id="isExistedYHBH" resultType="java.lang.Integer" parameterType="java.lang.String">
+		SELECT COUNT(*) FROM IP_DSM_STAFF WHERE YHBH = #{yhbh} AND JLZT = '1'
+	</select>
+	
+	<update id="updateOriginDSM" parameterType="com.cib.cap4j.cfn.encrypt.vo.IpDsmStaffVO">  
+        UPDATE IP_DSM_STAFF SET QXZJ = #{qxzj},ZHXGR = #{zhxgr},ZHXGSJ = #{zhxgsj} 
+        WHERE YHBH = #{yhbh} AND JLZT = '1'
+    </update>
+</mapper>

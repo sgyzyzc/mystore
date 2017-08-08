@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cib.cap4j.cfn.permissionRelation.dao.IRoleAssignPermissionDao">
+		<resultMap id="ipResFunction_result" type="com.cib.cap4j.cfn.function.vo.IPResFunctionVO">
+		     <id column="GNXXZJ" property="gnxxzj" />
+		     <result column="GNBM" property="gnbm" />
+		     <result column="SFKY" property="sfky" />
+		     <result column="GNMS" property="gnms" />
+		     <result column="GNDYURL" property="gndyurl" />
+		     <result column="GNSSMK" property="gnssmk" />
+		</resultMap>
+	<!-- 获取所有功能信息 -->	
+     <select id="findAllList" resultMap="ipResFunction_result" parameterType="com.cib.cap4j.cfn.function.vo.IPResFunctionVO">
+			  SELECT * FROM IP_RESFUNCTION  WHERE 1=1
+			  <if test="gnxxzj != null">  AND GNXXZJ =#{gnxxzj} </if>
+			  <if test="gnbm != null">  AND GNBM  like ${gnbm}</if>
+    </select>
+	<!-- 获取功能信息 -->	
+     <select id="findFuncList" resultMap="ipResFunction_result" parameterType="com.cib.cap4j.cfn.function.vo.IPResFunctionVO">
+			  SELECT * FROM IP_RESFUNCTION  WHERE GNBM = #{gnbm}
+    </select>
+	<!-- 获取所有功能信息总记录数 -->	
+     <select id="findAllListCount" resultType="int" parameterType="com.cib.cap4j.cfn.function.vo.IPResFunctionVO">
+			  SELECT COUNT(*) FROM IP_RESFUNCTION  WHERE 1=1
+			  <if test="gnbm != null">  AND GNBM  like ${gnbm}</if>
+    </select>
+	<!-- 保存功能信息 -->
+	<insert id="saveFunction" parameterType="com.cib.cap4j.cfn.function.vo.IPResFunctionVO">
+		INSERT INTO IP_RESFUNCTION(GNXXZJ,GNBM,SFKY,GNMS,GNDYURL,GNSSMK)  
+			 VALUES(#{gnxxzj},#{gnbm},#{sfky},#{gnms,jdbcType=VARCHAR},#{gndyurl},#{gnssmk})
+	</insert>
+	<!-- 更新功能信息 -->
+	<update id="updateFunction" parameterType="com.cib.cap4j.cfn.function.vo.IPResFunctionVO">
+		UPDATE IP_RESFUNCTION 
+		<set>
+		 GNBM = #{gnbm},SFKY = #{sfky},GNMS = #{gnms,jdbcType=VARCHAR},GNDYURL = #{gndyurl},GNSSMK = #{gnssmk}
+		</set>
+		WHERE GNXXZJ =#{gnxxzj}
+	</update>
+	<!-- 删除功能信息：根据功能主键del -->
+	<delete id="delFunction" parameterType="com.cib.cap4j.cfn.function.vo.IPResFunctionVO">
+		DELETE FROM IP_RESFUNCTION WHERE GNXXZJ = #{gnxxzj}
+	</delete>
+     <select id="findRoleFunc" resultMap="ipResFunction_result" parameterType="com.cib.cap4j.cfn.grant.vo.IPArcGrantVO">
+			  SELECT * FROM IP_RESFUNCTION WHERE GNXXZJ IN (SELECT SQZYBM FROM  IP_ARCGRANT ARC
+            WHERE JLZT = #{jlzt}  AND SQZYLX = #{sqzylx} AND SQDXBH = #{sqdxbh}) 
+    </select>
+    
+     <select id="findRoleFuncCount" resultType="int" parameterType="com.cib.cap4j.cfn.grant.vo.IPArcGrantVO">
+			  SELECT COUNT(*) FROM IP_RESFUNCTION WHERE GNXXZJ IN (SELECT SQZYBM FROM  IP_ARCGRANT ARC
+            WHERE JLZT = #{jlzt}  AND SQZYLX =#{sqzylx} AND SQDXBH =#{sqdxbh})    
+    </select>
+     <select id="findChooseAllFunc" resultMap="ipResFunction_result" parameterType="com.cib.cap4j.cfn.grant.vo.IPArcGrantVO">
+			  select url.* from (SELECT IPF.*,'1' AS CU  FROM IP_RESFUNCTION IPF WHERE GNXXZJ IN (SELECT SQZYBM FROM  IP_ARCGRANT ARC
+            WHERE JLZT = #{jlzt}  AND SQZYLX = #{sqzylx} AND SQDXBH = #{sqdxbh})
+		union all
+			SELECT IPF.*,'0' AS CU  FROM IP_RESFUNCTION IPF WHERE GNXXZJ not IN (SELECT SQZYBM FROM  IP_ARCGRANT ARC
+			            WHERE JLZT = #{jlzt}  AND SQZYLX =#{sqzylx} AND SQDXBH = #{sqdxbh})) url
+    </select>
+    <!-- 获取角色拥有的菜单【选中的菜单节点】的功能权限 -->
+    <select id="findMenuNodeFunc" resultMap="ipResFunction_result" parameterType="java.util.HashMap">
+			select *
+			  from ip_resfunction funct
+			 where funct.gnxxzj in (select arcg.sqzybm
+			                          from ip_arcgrant arcg
+			                         where arcg.sqdxbh = #{sqdxbh}
+			                           and arcg.sqzylx = #{sqzylx}
+		                               AND arcg.JLZT = #{jlzt})
+			   and funct.gnssmk = #{gnssmk}
+    </select>
+    <!-- 获取角色拥有的菜单【选中的菜单节点】的功能权限总记录数 -->
+    <select id="findMenuNodeFuncCount" resultType="int" parameterType="java.util.HashMap">
+			select count(*)
+			  from ip_resfunction funct
+			 where funct.gnxxzj in (select arcg.sqzybm
+			                          from ip_arcgrant arcg
+			                         where arcg.sqdxbh = #{sqdxbh}
+			                           and arcg.sqzylx = #{sqzylx}
+		                               AND arcg.JLZT = #{jlzt})
+			   and funct.gnssmk = #{gnssmk}
+    </select>
+    <!-- 获取角色拥有未归属模块的所有功能权限 -->
+    <select id="findMenuNodeAllOtherFunc" resultMap="ipResFunction_result" parameterType="java.util.HashMap">
+			select a.*
+			  from ip_resfunction a, ip_arcgrant b
+			 where a.gnxxzj = b.sqzybm
+			   and b.sqdxbh = #{sqdxbh}
+			   <if test="jlzt != null">  AND jlzt = '1'</if>
+			   and b.sqzybm in
+			       (select gnxxzj
+			          from ip_resfunction
+			         where gnssmk not in
+			               (select allmodelfrommenu
+			                  from (select distinct substr(cdurl, 0, INSTR(cdurl, '/', 2)) allmodelfrommenu
+			                          from ip_resmenu
+			                         where cdurl is not null
+			                           and cdurl <![CDATA[ <> ]]> 'other')))
+    </select>
+    <!--  -->
+    <select  id="findAssignedFunctionByYhbh" resultMap="ipResFunction_result" parameterType="com.cib.cap4j.cfn.rolestaff.vo.IPRoleStaffVO">
+    	SELECT * FROM IP_RESFUNCTION WHERE GNXXZJ IN
+				( SELECT SQZYBM FROM IP_ARCGRANT ARC WHERE JLZT = '1' AND SQZYLX = 'GN' AND SQDXBH IN 
+				(SELECT R.JSBH FROM IP_ROLE R, IP_ROLE_STAFF RS WHERE R.JSBH = RS.JSBH AND RS.YHBH = #{yhbh}))
+    </select>
+    
+    <!--获取归属模块的所有功能权限  -->
+    <select id="findSsmkAllFunc" resultMap="ipResFunction_result" parameterType="java.util.HashMap">
+		SELECT *
+		  FROM IP_RESFUNCTION FUNC
+		 WHERE FUNC.GNDYURL IN (SELECT IURL.URLLJ
+		                          FROM IP_RESURL IURL
+		                         WHERE IURL.URLLJ LIKE ${gnssmk})  
+    </select>
+    <!-- 获取未归属模块的所有功能权限 -->
+    <select id="findAllOtherFunc" resultMap="ipResFunction_result">
+		select * from ip_resfunction where gnssmk not in
+		       (select allmodelfrommenu
+		          from (select distinct substr(cdurl, 0, INSTR(cdurl, '/', 2)) allmodelfrommenu
+		                  from ip_resmenu
+		                 where cdurl is not null and cdurl <![CDATA[ <> ]]> 'other'))
+    </select>
+</mapper>		

@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cib.cap4j.cfn.codeType.dao.IPCodeTypeDao">
+	
+	<!-- 主表、从表的级联查询 -->
+	<resultMap id="ipCodeType_cascade_resultMap" type="com.cib.cap4j.cfn.codeType.vo.IPCodeTypeVO">
+		<id property="zj" column="ZJ"/>
+		<result property="sjlxbh" column="SJLXBH"/>
+		<result property="sjlxmc" column="SJLXMC"/>
+		<result property="sjlxms" column="SJLXMS"/>
+		<result property="pxh" column="PXH"/>
+		<result property="jlzt" column="JLZT"/>
+		<result property="sfzccj" column="SFZCCJ"/>
+		
+		<!-- 根据主表主键获取从表的列表信息 -->
+		<collection property="infos" column="zj" 
+			ofType="com.cib.cap4j.cfn.codeInfo.vo.IPCodeInfoVO" 
+			select="com.cib.cap4j.cfn.codeInfo.dao.IPCodeInfoDao.selectInfosByTypeId"/>
+    </resultMap>
+    
+    <!-- 仅查询主表 -->
+    <resultMap id="ipCodeType_resultMap" type="com.cib.cap4j.cfn.codeType.vo.IPCodeTypeVO">
+		<id property="zj" column="ZJ"/>
+		<result property="sjlxbh" column="SJLXBH"/>
+		<result property="sjlxmc" column="SJLXMC"/>
+		<result property="sjlxms" column="SJLXMS"/>
+		<result property="pxh" column="PXH"/>
+		<result property="jlzt" column="JLZT"/>
+		<result property="sfzccj" column="SFZCCJ"/>
+    </resultMap>
+    
+    <insert id="saveType" parameterType="com.cib.cap4j.cfn.codeType.vo.IPCodeTypeVO">
+    	INSERT INTO IP_CODETYPE(ZJ,SJLXBH,SJLXMC,SJLXMS,PXH,JLZT,SFZCCJ,MBLX)
+    	VALUES(
+	    	#{zj,jdbcType=VARCHAR},#{sjlxbh,jdbcType=VARCHAR},#{sjlxmc,jdbcType=VARCHAR},
+	    	#{sjlxms,jdbcType=VARCHAR},#{pxh, jdbcType=FLOAT},#{jlzt,jdbcType=VARCHAR},
+	    	#{sfzccj,jdbcType=VARCHAR},#{mblx,jdbcType=VARCHAR}
+    	)
+	</insert>
+	
+	<!-- 正常的删除动作 -->
+	<!-- 
+	<delete id="deleteType" parameterType="com.cib.cap4j.cfn.codeType.vo.IPCodeTypeVO">
+		DELETE FROM IP_CODETYPE WHERE ZJ = #{zj}
+	</delete>
+	 -->
+	
+	<!-- 码表的删除功能 -->
+	<update id="deleteType" parameterType="com.cib.cap4j.cfn.codeType.vo.IPCodeTypeVO">
+		UPDATE IP_CODETYPE
+     	<set>
+     		JLZT = #{jlzt}
+     	</set>
+     	WHERE ZJ = #{zj}
+	</update>
+	
+	<update id="updateType" parameterType="com.cib.cap4j.cfn.codeType.vo.IPCodeTypeVO">
+     	UPDATE IP_CODETYPE
+     	<set>
+     		<if test="sjlxbh != null">SJLXBH = #{sjlxbh}, </if>
+     		<if test="sjlxmc != null">SJLXMC = #{sjlxmc}, </if>
+     		<if test="sjlxms != null">SJLXMS = #{sjlxms}, </if>
+     		<if test="pxh != null">PXH = #{pxh}, </if>
+     		<if test="jlzt != null">JLZT = #{jlzt},</if>
+     		<if test="sfzccj != null">SFZCCJ = #{sfzccj},</if>
+     		<if test="mblx != null">MBLX = #{mblx}</if>
+     	</set>
+     	WHERE ZJ = #{zj}
+    </update>
+    
+    <!-- 根据条件获取码表类型列表 -->
+    <select id="findTypeList" resultMap="ipCodeType_resultMap">
+    	SELECT * 
+    		FROM IP_CODETYPE 
+    	WHERE JLZT = 1
+    	<if test="typeCode != null">  AND SJLXBH  like ${typeCode}</if>
+    </select>
+    
+    <!-- 根据条件获取码表类型总条数 -->
+    <select id="findTypeListCount" resultType="java.lang.Integer">
+    	SELECT COUNT(*) 
+    		FROM IP_CODETYPE 
+    	WHERE JLZT = 1
+    	<if test="_parameter != null">  AND SJLXBH  like ${typeCode}</if> 
+    </select>
+    
+    <!-- 根据码表类型id获取对应的类型 -->
+    <!-- 如果参数是单个String，那么参数必须写为 _parameter -->
+    <select id="findIPCodeTypeByKey" resultMap="ipCodeType_resultMap" parameterType="java.lang.String">
+    	SELECT * 
+    		FROM IP_CODETYPE 
+    	WHERE JLZT = 1
+    	<if test="_parameter != null">  AND ZJ = #{_parameter} </if>
+    </select>
+    
+    <!-- 码表的特殊方法，模板不用提取 -->
+    <!-- 获取所有码表类型 -->
+    <select id="findAllTypes" resultMap="ipCodeType_resultMap">
+    	SELECT * 
+    		FROM IP_CODETYPE 
+    	WHERE JLZT = 1
+    </select>
+    
+    <!-- 如果参数是单个String，那么参数必须写为 _parameter -->
+    <select id="findIPCodeTypeByCode" resultMap="ipCodeType_cascade_resultMap" parameterType="java.lang.String">
+    	SELECT * 
+    		FROM IP_CODETYPE 
+    	WHERE JLZT = 1
+    	<if test="_parameter != null">  AND SJLXBH  like ${_parameter}</if> 
+    </select>
+    
+    <select id="findIPCodeTypeByMBBH" resultMap="ipCodeType_cascade_resultMap" parameterType="java.lang.String">
+    	SELECT * 
+    		FROM IP_CODETYPE 
+    	WHERE JLZT = 1 AND MBLX = '0'
+    	<if test="_parameter != null">  AND SJLXBH  = #{_parameter}</if> 
+    </select>
+    
+</mapper>

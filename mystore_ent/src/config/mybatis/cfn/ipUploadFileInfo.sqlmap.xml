@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cib.cap4j.cfn.common.upload.dao.IIPUploadFileInfoDao">
+	<resultMap id="uploadFileInfoVO_result" type="com.cib.cap4j.cfn.common.upload.vo.IPUploadFileInfoVO">
+        <id column="WJSCXXZJ" property="wjscxxzj" />
+        <result column="LCYWBH" property="lcywbh" />
+        <result column="YWBH" property="ywbh" />
+        <result column="BCWJM" property="bcwjm" />
+        <result column="WJYM" property="wjym" />
+        <result column="WJDX" property="wjdx" />
+        <result column="WJLJ" property="wjlj" />
+        <result column="CJR" property="cjr" />
+        <result column="CJSJ" property="cjsj" />
+        <result column="ZHXGR" property="zhxgr" />
+        <result column="ZHXGSJ" property="zhxgsj" />
+        <result column="JLZT" property="jlzt" />
+    </resultMap>
+	
+    <select id="findAll" resultMap="uploadFileInfoVO_result">
+        select *
+        from IP_UPLOADFILEINFO where JLZT = '1'
+    </select>
+
+    <select id="findById" resultMap="uploadFileInfoVO_result" parameterType="string">
+        select * from IP_UPLOADFILEINFO where JLZT = '1' and WJSCXXZJ = #{id}
+    </select>
+
+    <select id="findByDocId" resultMap="uploadFileInfoVO_result" parameterType="string">
+        select * from IP_UPLOADFILEINFO where JLZT = '1' and YWBH = #{docId}
+    </select>
+    
+    <insert id="save" parameterType="com.cib.cap4j.cfn.common.upload.vo.IPUploadFileInfoVO">
+        INSERT INTO IP_UPLOADFILEINFO 
+        (WJSCXXZJ, LCYWBH, YWBH, BCWJM, 
+        WJYM, WJDX, WJLJ, CJR, 
+        CJSJ, ZHXGR, ZHXGSJ, JLZT)
+		values 
+		(#{wjscxxzj,jdbcType=VARCHAR}, #{lcywbh,jdbcType=VARCHAR}, #{ywbh,jdbcType=VARCHAR}, #{bcwjm,jdbcType=VARCHAR}, 
+		#{wjym,jdbcType=VARCHAR}, #{wjdx,jdbcType=VARCHAR}, #{wjlj,jdbcType=VARCHAR}, #{cjr,jdbcType=VARCHAR}, 
+		#{cjsj,jdbcType=TIMESTAMP}, #{zhxgr,jdbcType=VARCHAR}, #{zhxgsj,jdbcType=TIMESTAMP}, #{jlzt,jdbcType=VARCHAR})
+    </insert>
+    
+    <update id="update" parameterType="com.cib.cap4j.cfn.common.upload.vo.IPUploadFileInfoVO">
+        update IP_UPLOADFILEINFO
+        	<set>
+				<if test="wjscxxzj != null">wjscxxzj = #{wjscxxzj,jdbcType=VARCHAR},</if>
+				<if test="lcywbh != null">lcywbh = #{lcywbh,jdbcType=VARCHAR},</if>
+				<if test="ywbh != null">ywbh = #{ywbh,jdbcType=VARCHAR},</if>
+				<if test="bcwjm != null">bcwjm = #{bcwjm,jdbcType=VARCHAR},</if>
+				<if test="wjym != null">wjym = #{wjym,jdbcType=VARCHAR},</if>
+				<if test="wjdx != null">wjdx = #{wjdx,jdbcType=VARCHAR},</if>
+				<if test="wjlj != null">wjlj = #{wjlj,jdbcType=VARCHAR},</if>
+				<if test="cjr != null">CJR = #{cjr,jdbcType=VARCHAR},</if>
+				<if test="cjsj != null">CJSJ = #{cjsj,jdbcType=TIMESTAMP},</if>
+				<if test="zhxgr != null">ZHXGR = #{zhxgr,jdbcType=VARCHAR},</if>
+				<if test="zhxgsj != null">ZHXGSJ = #{zhxgsj,jdbcType=TIMESTAMP},</if>
+				<if test="jlzt != null">JLZT = #{jlzt,jdbcType=VARCHAR}</if>
+			</set>
+        where WJSCXXZJ = #{wjscxxzj}
+    </update>
+    
+    <delete id="delete" parameterType="string">
+    	delete from IP_UPLOADFILEINFO where WJSCXXZJ = #{id}
+    </delete>
+</mapper>

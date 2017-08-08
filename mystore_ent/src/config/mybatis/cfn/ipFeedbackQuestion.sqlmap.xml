@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cib.cap4j.cfn.feedback.dao.IIPFeedbackQuestionDao">
+	<resultMap id="feedbackQuestionVO_result" type="com.cib.cap4j.cfn.feedback.vo.IPFeedbackQuestionVO">
+        <id column="wtbh" property="wtbh" />
+        <result column="wtbt" property="wtbt" />
+        <result column="wtfj" property="wtfj" />
+        <result column="wtnr" property="wtnr" />
+        <result column="wtlx" property="wtlx" />
+        <result column="yzcd" property="yzcd" />
+        <result column="lxfs" property="lxfs" />
+        <result column="cjr" property="cjr" />
+        <result column="cjsj" property="cjsj" />
+        <result column="zhxgr" property="zhxgr" />
+        <result column="zhxgsj" property="zhxgsj" />
+        <result column="jlzt" property="jlzt" />
+        <result column="bz" property="bz" />
+        <association column="ssmk" property="ssmk" select="com.cib.cap4j.cfn.feedback.dao.IIPFeedbackQuestionDao.queryMenu"/>
+		<association column="twr" property="twr" select="com.cib.cap4j.cfn.feedback.dao.IIPFeedbackQuestionDao.queryStaff"/>
+		<association column="wtbh" property="answer" select="com.cib.cap4j.cfn.feedback.dao.IIPFeedbackAnswerDao.findByWtbh"/>
+    </resultMap>
+    
+    <resultMap id="staffVO_result" type="com.cib.cap4j.cfn.staff.vo.IPStaffVO">
+    	<id column="yhbh" property="yhbh" />
+    	<result column="yhmc" property="yhmc" />
+    	<result column="ssjg" property="ssjg" />
+    </resultMap>
+  	<select id="queryStaff" resultMap="staffVO_result">
+        select yhbh,yhmc,ssjg from IP_STAFF where JLZT = '1' and yhbh = #{yhbh}
+    </select>
+    
+    <resultMap id="menuVO_result" type="com.cib.cap4j.cfn.function.vo.IPResMenuVO">
+    	<id column="cdbh" property="cdbh" />
+    	<result column="cdmc" property="cdmc" />
+    </resultMap>
+  	<select id="queryMenu" resultMap="menuVO_result">
+        select cdbh,cdmc from IP_RESMENU where cdbh = #{cdbh}
+    </select>
+	
+  	<select id="getAllCount" resultType="int">
+        select count(*) from IP_FEEDBACK_QUESTION where JLZT = '1'
+        <if test="wtnr != null and wtnr != ''"> and wtnr like ${wtnr}</if>
+        <if test="wtlx != null and wtlx != ''"> and wtlx = #{wtlx}</if>
+        <if test="yzcd != null and yzcd != ''"> and yzcd = #{yzcd}</if>
+        <if test="ssmk != null and ssmk != ''"> and ssmk = #{ssmk}</if>
+    </select>
+    
+    <select id="findAll" resultMap="feedbackQuestionVO_result">
+        select * from IP_FEEDBACK_QUESTION where JLZT = '1'
+    </select>
+    
+    <select id="findCurPage" resultMap="feedbackQuestionVO_result" parameterType="java.util.Map">
+        select *
+        from IP_FEEDBACK_QUESTION fq 
+        where fq.JLZT = '1'
+        <if test="wtnr != null and wtnr != ''"> and fq.wtnr like ${wtnr}</if>
+        <if test="wtlx != null and wtlx != ''"> and fq.wtlx = #{wtlx}</if>
+        <if test="yzcd != null and yzcd != ''"> and fq.yzcd = #{yzcd}</if>
+        <if test="ssmk != null and ssmk != ''"> and fq.ssmk = #{ssmk}</if>
+        <if test="twr != null and twr != ''"> and fq.twr = #{twr}</if>
+        order by fq.CJSJ desc
+    </select>
+    
+    <select id="findById" resultMap="feedbackQuestionVO_result" parameterType="string">
+        select *
+        from IP_FEEDBACK_QUESTION fq 
+        where fq.JLZT = '1' and fq.wtbh = #{id}
+    </select>
+    
+    <insert id="save" parameterType="com.cib.cap4j.cfn.feedback.vo.IPFeedbackQuestionVO">
+        INSERT INTO IP_FEEDBACK_QUESTION 
+        (wtbh, twr, wtbt, wtfj, 
+        wtnr, wtlx, yzcd, ssmk, 
+        lxfs, cjr, cjsj, zhxgr, 
+        zhxgsj, jlzt, bz)
+		values 
+		(#{wtbh,jdbcType=VARCHAR}, #{twr.yhbh,jdbcType=VARCHAR}, #{wtbt,jdbcType=VARCHAR}, #{wtfj,jdbcType=VARCHAR}, 
+		#{wtnr,jdbcType=VARCHAR}, #{wtlx,jdbcType=VARCHAR}, #{yzcd,jdbcType=VARCHAR}, #{ssmk.cdbh,jdbcType=VARCHAR}, 
+		#{lxfs,jdbcType=VARCHAR}, #{cjr,jdbcType=VARCHAR}, #{cjsj,jdbcType=TIMESTAMP}, #{zhxgr,jdbcType=VARCHAR}, 
+		#{zhxgsj,jdbcType=TIMESTAMP}, #{jlzt,jdbcType=VARCHAR}, #{bz,jdbcType=INTEGER})
+    </insert>
+    
+    <update id="update" parameterType="com.cib.cap4j.cfn.feedback.vo.IPFeedbackQuestionVO">
+        update IP_FEEDBACK_QUESTION
+        	<set>
+				<if test="twr != null">twr = #{twr,jdbcType=VARCHAR},</if>
+				<if test="wtbt != null">wtbt = #{wtbt,jdbcType=VARCHAR},</if>
+				<if test="wtfj != null">wtfj = #{wtfj,jdbcType=VARCHAR},</if>
+				<if test="wtnr != null">wtnr = #{wtnr,jdbcType=VARCHAR},</if>
+				<if test="wtlx != null">wtlx = #{wtlx,jdbcType=VARCHAR},</if>
+				<if test="yzcd != null">yzcd = #{yzcd,jdbcType=VARCHAR},</if>
+				<if test="ssmk != null">ssmk = #{ssmk,jdbcType=VARCHAR},</if>
+				<if test="lxfs != null">lxfs = #{lxfs,jdbcType=VARCHAR},</if>
+				<if test="cjr != null">cjr = #{cjr,jdbcType=VARCHAR},</if>
+				<if test="cjsj != null">cjsj = #{cjsj,jdbcType=TIMESTAMP},</if>
+				<if test="zhxgr != null">zhxgr = #{zhxgr,jdbcType=VARCHAR},</if>
+				<if test="zhxgsj != null">zhxgsj = #{zhxgsj,jdbcType=TIMESTAMP},</if>
+				<if test="bz != null">bz = #{bz,jdbcType=VARCHAR},</if>
+				<if test="jlzt != null">JLZT = #{jlzt,jdbcType=VARCHAR}</if>
+			</set>
+        where wtbh = #{wtbh}
+    </update>
+
+    <update id="delete_logic" parameterType="java.util.HashMap">
+        update IP_FEEDBACK_QUESTION
+        	<set>
+        		JLZT = '0', zhxgr = #{zhxgr,jdbcType=VARCHAR}, zhxgsj = #{zhxgsj,jdbcType=TIMESTAMP}
+			</set>
+			where wtbh in
+			<foreach item="id" index="index" collection="idArr"
+				open="(" separator="," close=")">
+				#{id}
+			</foreach>
+    </update>
+    
+    <delete id="delete" parameterType="string">
+        delete from IP_FEEDBACK_QUESTION where wtbh in
+        <foreach item="item" index="index" collection="array"
+			open="(" separator="," close=")">
+			#{item}
+		</foreach>
+    </delete>
+</mapper>

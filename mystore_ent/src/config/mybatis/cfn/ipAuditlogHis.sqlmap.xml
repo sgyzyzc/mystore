@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cib.cap4j.cfn.auditlog.dao.IPAuditlogDao">
+	<resultMap id="auditlogHisVO_result" type="com.cib.cap4j.cfn.auditlog.vo.IPAuditlogHisVO">
+        <id column="RZBH" property="rzbh" />
+        <result column="CZBM" property="czbm" />
+        <result column="CZKHJQIP" property="czkhjqip" />
+        <result column="YWLXBM" property="ywlxbm" />
+        <result column="RZLX" property="rzlx" />
+        <result column="CZRZXX" property="czrzxx" />
+        <result column="RZJB" property="rzjb" />
+        <result column="RZJLSJ" property="rzjlsj" />
+        <result column="JLZT" property="jlzt" />
+        <result column="YHBH" property="yhbh" />
+    </resultMap>
+    
+    <select id="findAllHisByPagenation" resultMap="auditlogHisVO_result" parameterType="java.util.Map">
+     	select h.*, s.yhmc username, u.jgmc unitname from ip_auditlog_his h
+     	 left join ip_staff s on h.yhbh= s.yhbh
+     	 left join ip_unit u on s.ssjg = u.zj
+     	 where h.jlzt=1
+     	<if test="czkhjqip != null and czkhjqip !=''">  and h.czkhjqip like ${czkhjqip}</if>
+    	<if test="czrzxx != null and czrzxx !=''">  and h.czrzxx like ${czrzxx}</if>
+     	<if test="username != null and username !=''">  and s.yhmc like ${username}</if>
+     	<if test="begin != null">   and h.rzjlsj <![CDATA[>=]]> #{begin}</if>
+     	<if test="end != null">  and h.rzjlsj  <![CDATA[<=]]>#{end}</if>
+     	order by h.rzjlsj desc
+    </select>
+ 		
+	 <select id="countAllHis" resultType="int" parameterType="java.util.Map">
+    	select count(*) from ip_auditlog_his h
+    	 left join ip_staff s on h.yhbh= s.yhbh
+    	 left join ip_unit u on s.ssjg = u.zj
+    	 where h.jlzt=1
+     	<if test="czkhjqip != null and czkhjqip !=''">  and h.czkhjqip like ${czkhjqip}</if>
+    	<if test="czrzxx != null and czrzxx !=''">  and h.czrzxx like ${czrzxx}</if>
+     	<if test="username != null and username !=''">  and s.yhmc like ${username}</if>
+     	<if test="begin != null">   and h.rzjlsj <![CDATA[>=]]> #{begin}</if>
+     	<if test="end != null">  and h.rzjlsj  <![CDATA[<=]]>#{end}</if>
+     </select>
+</mapper>	

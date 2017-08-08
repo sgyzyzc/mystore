@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="GBK"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!--
+   * 角色用户关联操作流水hibernate实体映射
+   *
+   * Created on 2014-5-16
+   * @author 张玉清 
+   * @reviewer 
+-->    
+<hibernate-mapping package="com.cib.cap4j.cfn.ci.vo">
+	<class name="IPRoleStaffCIVO" table="IP_ROLE_STAFF_CI">
+		<id name="zj" column="ZJ"/>
+		<property name="yhjsgxzj" column="YHJSGXZJ"/>
+		<property name="yhbh" column="YHBH"/>
+		<property name="jsbh" column="JSBH"/>
+		<property name="cjr" column="CJR"/>
+		<property name="cjsj" column="CJSJ"/>
+		<property name="zhxgr" column="ZHXGR"/>
+		<property name="zhxgsj" column="ZHXGSJ"/>
+		<property name="jlzt" column="JLZT"/>
+		<property name="czr" column="CZR"/>
+		<property name="czsj" column="CZSJ"/>
+		<property name="czlx" column="CZLX"/>
+		<property name="fhsj" column="FHSJ"/>
+		<property name="fhry" column="FHRY"/>
+		<property name="fhzt" column="FHZT"/>
+	</class>
+</hibernate-mapping>

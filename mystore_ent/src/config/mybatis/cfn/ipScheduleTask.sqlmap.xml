@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cib.cap4j.cfn.schedule.dao.IScheduleTaskDao">
+	<resultMap id="scheduleTaskVO_result" type="com.cib.cap4j.cfn.schedule.vo.IPScheduleTaskVO">
+        <id column="DSRWZJ" property="dsrwzj" />
+        <result column="RWBM" property="rwbm" />
+        <result column="RWMC" property="rwmc" />
+        <result column="RWQDSJ" property="rwqdsj" />
+        <result column="RWLM" property="rwlm" />
+        <result column="RWZT" property="rwzt" />
+        <result column="RWZXZZ" property="rwzxzz" />
+        <result column="BZ" property="bz" />
+    </resultMap>
+	
+  	<select id="getAllCount" resultType="int" >
+        select count(*) from ip_schedule_task 
+    </select>
+    
+    
+    <select id="findAll" resultMap="scheduleTaskVO_result">
+   		SELECT * FROM ip_schedule_task 
+    </select>
+    
+    
+    <select id="findObjectByZJ" resultMap="scheduleTaskVO_result" parameterType="string">
+   		SELECT * FROM ip_schedule_task  where dsrwzj= #{dsrwzj}
+    </select>
+    
+    <select id="findObjectByZJAndRwbm" resultMap="scheduleTaskVO_result">
+    <![CDATA[
+   		SELECT * FROM ip_schedule_task  where dsrwzj<> #{dsrwzj} and rwbm=#{rwbm}
+     ]]>
+    </select>
+    
+     <select id="findObjectByRwbm" resultMap="scheduleTaskVO_result" parameterType="string">
+   		SELECT * FROM ip_schedule_task  where rwbm= #{rwbm}
+    </select>
+    
+    
+    <insert id="insertScheduleTask" parameterType="com.cib.cap4j.cfn.schedule.vo.IPScheduleTaskVO">
+		insert into ip_schedule_task (DSRWZJ, RWBM, RWMC, RWQDSJ, RWLM,
+		RWZT,RWZXZZ,BZ,CJR,CJSJ,SFJK)
+		values
+		(#{dsrwzj,jdbcType=VARCHAR},#{rwbm,jdbcType=VARCHAR},
+		#{rwmc,jdbcType=VARCHAR},#{rwqdsj,jdbcType=VARCHAR},
+		#{rwlm,jdbcType=VARCHAR},#{rwzt,jdbcType=VARCHAR},
+		#{rwzxzz,jdbcType=VARCHAR},#{bz,jdbcType=VARCHAR},
+		#{cjr,jdbcType=VARCHAR},#{cjsj},#{sfjk,jdbcType=VARCHAR})
+    </insert>
+    
+    
+    
+    <update id="updateScheduleTask" parameterType="com.cib.cap4j.cfn.schedule.vo.IPScheduleTaskVO">
+		update ip_schedule_task 
+			<set>
+				<if test="rwbm != null">RWBM = #{rwbm,jdbcType=VARCHAR},</if>
+				<if test="rwmc != null">RWMC = #{rwmc,jdbcType=VARCHAR},</if>
+				<if test="rwqdsj != null">RWQDSJ = #{rwqdsj,jdbcType=VARCHAR},</if>
+				<if test="rwlm != null">RWLM = #{rwlm,jdbcType=VARCHAR},</if>
+				<if test="rwzt != null">RWZT = #{rwzt,jdbcType=VARCHAR},</if>
+				<if test="rwzxzz != null">RWZXZZ = #{rwzxzz,jdbcType=VARCHAR},</if>
+				<if test="bz != null">BZ = #{bz,jdbcType=VARCHAR},</if>
+				<if test="zhxgr != null">ZHXGR = #{zhxgr,jdbcType=VARCHAR},</if>
+				<if test="zhxgsj != null">ZHXGSJ = #{zhxgsj},</if>
+				<if test="sfjk != null">SFJK = #{sfjk,jdbcType=VARCHAR}</if>
+			</set>
+			where DSRWZJ = #{dsrwzj}
+    </update>
+    
+    
+    <select id="findCurPage" resultMap="scheduleTaskVO_result">
+		SELECT * 
+		FROM ip_schedule_task where 1=1 
+        <if test="rwmc != null and rwmc != ''"> 
+        	and RWMC like ${rwmc} 
+        </if>
+        order by cjsj
+    </select>
+   
+     <select id="findCurPageCount" resultType="int">
+		SELECT count(*) FROM ip_schedule_task where 1=1 
+        <if test="rwmc != null and rwmc != ''"> 
+        	and RWMC like ${rwmc}
+        </if>
+    </select>
+</mapper>

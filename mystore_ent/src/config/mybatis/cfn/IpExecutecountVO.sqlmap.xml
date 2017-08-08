@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cib.cap4j.cfn.statistics.history.dao.IIpExecutecountDao">
+	<resultMap id="ipExecutecountMap" type="com.cib.cap4j.cfn.statistics.history.vo.IpExecutecountVO">
+		<id column="ZJ" property="zj" />
+		<result column="JLSJ" property="jlsj" />
+		<result column="GSRQ" property="gsrq" />
+		<result column="ZXNR" property="zxnr" />
+		<result column="ZXCS" property="zxcs" />
+		<result column="JLLX" property="jllx" />
+		<result column="GSJD" property="gsjd" />
+	</resultMap>
+
+	<select id="findAllInfosCount" resultType="int">
+		select count(*)
+		from ip_executecount
+		where 1=1
+		<if test="gsrq != null and gsrq != ''"> and GSRQ = #{gsrq}</if>
+		<if test="jllx != null and jllx != ''"> and JLLX = #{jllx}</if>
+	</select>
+
+	<select id="findAllInfos" parameterType="com.cib.cap4j.cfn.statistics.history.vo.IpExecutecountVO"
+		resultMap="ipExecutecountMap">
+		select ZJ,JLSJ,GSRQ,ZXNR,ZXCS,JLLX,GSJD
+		from ip_executecount
+		where 1=1
+		<if test="gsrq != null and gsrq != ''"> and GSRQ = #{gsrq}</if>
+		<if test="jllx != null and jllx != ''"> and JLLX = #{jllx}</if>
+	</select>
+
+	<insert id="save" parameterType="com.cib.cap4j.cfn.statistics.history.vo.IpExecutecountVO">
+		INSERT INTO ip_executecount
+		(ZJ,JLSJ,GSRQ,ZXNR,ZXCS,JLLX,GSJD)
+		values
+		(#{zj,jdbcType=CHAR},#{jlsj,jdbcType=TIMESTAMP},#{gsrq,jdbcType=DATE},#{zxnr,jdbcType=VARCHAR},#{zxcs,jdbcType=NUMERIC},#{jllx,jdbcType=CHAR},#{gsjd,jdbcType=VARCHAR})
+	</insert>
+
+	<update id="update" parameterType="com.cib.cap4j.cfn.statistics.history.vo.IpExecutecountVO">
+		update ip_executecount
+		<trim prefix="SET" suffixOverrides=",">
+			<if test="zj != null"> ZJ = #{zj},</if>
+			<if test="jlsj != null"> JLSJ = #{jlsj},</if>
+			<if test="gsrq != null"> GSRQ = #{gsrq},</if>
+			<if test="zxnr != null"> ZXNR = #{zxnr},</if>
+			<if test="zxcs != null"> ZXCS = #{zxcs},</if>
+			<if test="jllx != null"> JLLX = #{jllx},</if>
+			<if test="gsjd != null"> GSJD = #{gsjd},</if>
+		</trim>
+		where
+		<trim prefix="" suffixOverrides="AND">
+			<if test="zj != null">ZJ = #{zj} AND </if>
+		</trim>
+	</update>
+
+	<delete id="delete" parameterType="com.cib.cap4j.cfn.statistics.history.vo.IpExecutecountVO">
+		delete from ip_executecount where ZJ in
+		<foreach collection="array" item="oneId" open="(" close=")"
+			separator=",">
+			#{oneId}
+		</foreach>
+	</delete>
+	
+    <delete id="deleteByDate" parameterType="com.cib.cap4j.cfn.statistics.history.vo.IpExecutecountVO">
+		delete from ip_executecount 
+		where GSRQ <![CDATA[<]]> #{gsrq}
+	</delete>
+	
+	<select id="getIpExecutecountVOById" parameterType="string"
+		resultMap="ipExecutecountMap">
+		select ZJ,JLSJ,GSRQ,ZXNR,ZXCS,JLLX,GSJD
+		from ip_executecount where ZJ = #{value}
+	</select>
+</mapper>

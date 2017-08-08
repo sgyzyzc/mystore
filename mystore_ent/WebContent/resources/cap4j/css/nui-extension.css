@@ -1,0 +1,44 @@
+.mini-tab-menu
+{
+    display:inline-block;
+    width:13px;height:13px;    
+    vertical-align:top;
+    margin-top:1px;
+
+    background:url(../images/col-move-top.gif) no-repeat 3px 3px;
+    cursor:pointer;
+}
+.mini-tab-menu-hover
+{
+    background-color:#aaa;
+}
+
+/*重置toolbar上button disabled的样式*/
+
+body .mini-toolbar a.mini-button-disabled, body .mini-toolbar a:hover.mini-button-disabled
+{ 
+	border:1px solid #ccc;
+    padding:0px;
+    color:#777;    
+    cursor:default;
+}
+
+/*ie6下fileupload htmlfile控件文本框文本遮住'浏览'按钮*/
+.mini-fileupload .mini-buttonedit-border
+{
+	padding-right: 54px !important;
+}
+.mini-htmlfile .mini-buttonedit-border
+{
+	padding-right: 54px !important;
+}
+/*ie6、7下datagrid控件设置为disable时，分隔条不透明，出现白色背景*/
+.mini-disabled .mini-grid-column-splitter
+{
+	display:none;
+}
+/*渲染textbox时出现url请求错误“.../defalt/0” */
+.mini-textbox-input
+{
+	background:url(about:blank) no-repeat\0 !important;
+}

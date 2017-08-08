@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cib.cap4j.cfn.ci.dao.IIPRoleStaffCIDao">
+	<resultMap id="ipRoleStaffCi_result" type="com.cib.cap4j.cfn.ci.vo.IPRoleStaffCIVO">
+	     <id column="ZJ" property="zj" />
+	     <result column="YHJSGXZJ" property="yhjsgxzj" />
+	     <result column="YHBH" property="yhbh" />
+	     <result column="JSBH" property="jsbh" />
+	     <result column="CJR" property="cjr" />
+	     <result column="CJSJ" property="cjsj" />
+	     <result column="ZHXGR" property="zhxgr" />
+	     <result column="ZHXGSJ" property="zhxgsj" />
+	     <result column="JLZT" property="jlzt" />
+	     <result column="CZR" property="czr" />
+	     <result column="CZSJ" property="czsj" />
+	     <result column="CZLX" property="czlx" />
+	</resultMap>
+		
+    <!-- 查找所有的角色操作流水 -->
+    <select id="findAll" resultMap="ipRoleStaffCi_result" parameterType="java.util.Map">
+    	SELECT RSC.*, R.JSMC AS JSMC, S.YHMC AS YHMC, S.NOTESID AS NOTESID, T.YHMC AS CZRXM, F.YHMC AS FHRXM FROM
+    	 IP_ROLE_STAFF_CI RSC LEFT JOIN IP_STAFF F ON RSC.FHRY = F.YHBH, IP_ROLE R, IP_STAFF S, IP_STAFF T, IP_UNIT U WHERE 
+		 RSC.JSBH = R.JSBH AND RSC.YHBH = S.YHBH AND RSC.CZR = T.YHBH AND S.SSJG = U.ZJ 
+    	 <if test="notesid != null and notesid !=''">  AND S.NOTESID like ${notesid}</if>
+		 <if test="yhmc != null and yhmc !=''">  AND S.YHMC LIKE ${yhmc}</if>
+     	 <if test="jsmc != null and jsmc!=''">  AND R.JSMC LIKE ${jsmc}</if>
+       	 <if test="czrxm != null and czrxm !=''">  AND T.YHMC LIKE ${czrxm}</if>
+    	 <if test="czlx != null and czlx!=''">  AND RSC.CZLX = #{czlx}</if>
+    	 <if test="userUnit != null and userUnit == '999999999'">  AND U.ZJ = #{userUnit}</if>
+       	 <if test="userUnit != null and userUnit != '999999999'">  AND (U.XZCXLJ LIKE ${userUnit} OR U.ZJ = #{defaultUnit})</if>
+    	ORDER BY CZSJ DESC
+    </select>
+     <!-- 统计所有的角色操作流水 -->
+    <select id="countAll" resultType="int" parameterType="java.util.Map">
+    	SELECT COUNT(*) FROM IP_ROLE_STAFF_CI RSC, IP_ROLE R, IP_STAFF S, IP_STAFF T, IP_UNIT U
+    	 WHERE RSC.JSBH = R.JSBH AND RSC.YHBH = S.YHBH AND RSC.CZR = T.YHBH AND S.SSJG = U.ZJ 
+    	 <if test="notesid != null and notesid !=''">  AND S.NOTESID LIKE ${notesid}</if>
+		 <if test="yhmc != null and yhmc !=''">  AND S.YHMC LIKE ${yhmc}</if>
+     	 <if test="jsmc != null and jsmc!=''">  AND R.JSMC LIKE ${jsmc}</if>
+       	 <if test="czrxm != null and czrxm !=''">  AND T.YHMC LIKE ${czrxm}</if>
+    	 <if test="czlx != null and czlx!=''">  AND RSC.CZLX = #{czlx}</if>
+    	 <if test="userUnit != null and userUnit == '999999999'">  AND U.ZJ = #{userUnit}</if>
+       	 <if test="userUnit != null and userUnit != '999999999'">  AND (U.XZCXLJ LIKE ${userUnit} OR U.ZJ = #{defaultUnit})</if>
+    </select>
+        <!-- 查找权重小于自己的所有的角色操作流水 -->
+    <select id="findAllWithRankGrant" resultMap="ipRoleStaffCi_result" parameterType="java.util.Map">
+    	SELECT RSC.*, R.JSMC AS JSMC, S.YHMC AS YHMC, S.NOTESID AS NOTESID, T.YHMC AS CZRXM FROM
+    	 IP_ROLE_STAFF_CI RSC, IP_ROLE R, IP_STAFF S, IP_STAFF T, IP_UNIT U WHERE 
+		 RSC.JSBH = R.JSBH AND RSC.YHBH = S.YHBH AND RSC.CZR = T.YHBH AND S.SSJG = U.ZJ 
+    	AND R.JSQZ <![CDATA[ <=]]> #{maxJsqz}
+    	AND R.JSBH NOT IN
+    	(
+	    	SELECT JSBH FROM IP_ROLE WHERE JSLX='3'
+	    	AND JSQZ = #{maxJsqz}
+    	)
+    	 <if test="notesid != null and notesid !=''">  AND S.NOTESID like ${notesid}</if>
+		 <if test="yhmc != null and yhmc !=''">  AND S.YHMC LIKE ${yhmc}</if>
+     	 <if test="jsmc != null and jsmc!=''">  AND R.JSMC LIKE ${jsmc}</if>
+       	 <if test="czrxm != null and czrxm !=''">  AND T.YHMC LIKE ${czrxm}</if>
+    	 <if test="czlx != null and czlx!=''">  AND RSC.CZLX = #{czlx}</if>
+    	 <if test="userUnit != null and userUnit == '999999999'">  AND U.ZJ = #{userUnit}</if>
+       	 <if test="userUnit != null and userUnit != '999999999'">  AND (U.XZCXLJ LIKE ${userUnit} OR U.ZJ = #{defaultUnit})</if>
+    	ORDER BY CZSJ DESC
+    </select>
+     <!-- 统计所有权重小于自己的角色操作流水 -->
+    <select id="countAllWithRankGrant" resultType="int" parameterType="java.util.Map">
+    	SELECT COUNT(*) FROM IP_ROLE_STAFF_CI RSC, IP_ROLE R, IP_STAFF S, IP_STAFF T, IP_UNIT U
+    	 WHERE RSC.JSBH = R.JSBH AND RSC.YHBH = S.YHBH AND RSC.CZR = T.YHBH AND S.SSJG = U.ZJ 
+    	     	AND R.JSQZ <![CDATA[ <=]]> #{maxJsqz}
+    	AND R.JSBH NOT IN
+    	(
+	    	SELECT JSBH FROM IP_ROLE WHERE JSLX='3'
+	    	AND JSQZ = #{maxJsqz}
+    	)
+    	 <if test="notesid != null and notesid !=''">  AND S.NOTESID LIKE ${notesid}</if>
+		 <if test="yhmc != null and yhmc !=''">  AND S.YHMC LIKE ${yhmc}</if>
+     	 <if test="jsmc != null and jsmc!=''">  AND R.JSMC LIKE ${jsmc}</if>
+       	 <if test="czrxm != null and czrxm !=''">  AND T.YHMC LIKE ${czrxm}</if>
+    	 <if test="czlx != null and czlx!=''">  AND RSC.CZLX = #{czlx}</if>
+    	 <if test="userUnit != null and userUnit == '999999999'">  AND U.ZJ = #{userUnit}</if>
+       	 <if test="userUnit != null and userUnit != '999999999'">  AND (U.XZCXLJ LIKE ${userUnit} OR U.ZJ = #{defaultUnit})</if>
+    </select>
+    
+    <update id="updateFhzt" parameterType="com.cib.cap4j.cfn.ci.vo.IPRoleCIVO">
+    	UPDATE IP_ROLE_STAFF_CI
+     	<set>
+     		FHZT = #{fhzt},
+     		FHRY = #{fhry},
+     	    FHSJ = #{fhsj}
+     	</set>
+     	WHERE ZJ = #{zj}
+    </update>
+    
+     <select id="countUnverified" resultType="int" parameterType="java.util.HashMap">
+     	SELECT COUNT(*) FROM ip_role_staff_ci WHERE JSBH = #{jsbh} AND YHBH = #{yhbh} AND FHZT = '0'
+     </select>
+     
+     <select id="findNotFHCount" resultType="int" parameterType="java.util.HashMap">
+     	SELECT COUNT(*) FROM ip_role_staff_ci WHERE FHZT = #{FHZT}
+     </select>
+  
+</mapper>		

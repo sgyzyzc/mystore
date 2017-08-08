@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cib.cap4j.cfn.security">
+	<resultMap id="security_result" type="java.util.HashMap">
+        <result column="YHBH" property="yhbh" javaType="string" />
+        <result column="YHMC" property="yhmc" javaType="string" />
+        <result column="YHDLM" property="yhdlm" javaType="string" />
+        <result column="NOTESID" property="notesid" javaType="string" />
+        <result column="ZT" property="zt" javaType="string" />
+        <result column="DLMM" property="dlmm" javaType="string" />
+        <result column="ZHGQSJ" property="zhgqsj" javaType="java.sql.Timestamp" />
+        <result column="MMGQSJ" property="mmgqsj" javaType="java.sql.Timestamp" />
+        <result column="ZJ" property="zj" javaType="string" />
+        <result column="JGMC" property="jgmc" javaType="string" />
+        <result column="XZCXLJ" property="xzcxlj" javaType="string" />
+        <result column="JSBH" property="jsbh" javaType="string" />
+        <result column="JSZT" property="jszt" javaType="string" />
+        <result column="RS_JLZT" property="rs_jlzt" javaType="string" />
+        <result column="R_JLZT" property="r_jlzt" javaType="string" />
+    </resultMap>
+
+    <select id="findStaffRole" resultMap="security_result" parameterType="java.util.HashMap">
+    <!--<select id="findStaffRole" resultType="java.util.HashMap" parameterType="java.util.HashMap">-->
+		select s.YHBH, s.YHMC, s.YHDLM, s.NOTESID, s.ZT, a.DLMM, a.ZHGQSJ, a.MMGQSJ, u.ZJ, u.JGMC, u.XZCXLJ, rs.JSBH,
+		r.JSZT, rs.JLZT RS_JLZT, r.JLZT R_JLZT
+		from IP_STAFF s left join IP_ARCUSERAUTH a on a.YHBH = s.YHBH 
+		left join IP_UNIT u on s.ssjg = u.zj 
+		left join IP_ROLE_STAFF rs on a.YHBH = rs.YHBH
+		left join IP_ROLE r on rs.JSBH = r.JSBH
+		where s.JLZT = '1'
+        <if test="YHDLM != null">and s.YHDLM = #{YHDLM}</if>
+        <if test="NOTESID != null">and s.NOTESID = #{NOTESID}</if>
+    </select>
+
+    <select id="findUrlRole" resultType="java.util.HashMap" parameterType="java.util.HashMap">
+		select u.urllj, g.sqdxbh roleid from IP_RESURL u
+		left join IP_ARCGRANT g on u.urlbh = g.sqzybm
+		left join IP_ROLE r on r.jsbh = g.sqdxbh
+		where g.sqzylx = 'LJ' and g.jlzt = '1' and r.jszt = '1'
+		order by u.urlbm
+    </select>
+
+</mapper>

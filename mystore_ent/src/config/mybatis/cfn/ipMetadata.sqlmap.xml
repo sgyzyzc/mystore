@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cib.cap4j.cfn.dataManage.dao.IpDataPermissionDao">
+		<resultMap id="ipMetadata_result" type="com.cib.cap4j.cfn.dataManage.vo.IpMetadataVO">
+		     <id column="YSJZJ" property="ysjzj" />
+		     <result column="DXMC" property="dxmc" />
+		     <result column="SSMK" property="ssmk" />
+		     <result column="QXDX" property="qxdx" />
+		     <result column="SJKBM" property="sjkbm" />
+		     <result column="SJKMC" property="sjkmc" />
+		     <result column="YMBM" property="ymbm" />
+		     <result column="YMMC" property="ymmc" />
+		</resultMap>
+		<insert id = "saveMetaData" parameterType="com.cib.cap4j.cfn.dataManage.vo.IpMetadataVO">
+			INSERT INTO IP_METADATA(YSJZJ,DXMC,SSMK,QXDX,SJKBM,SJKMC,YMBM,YMMC) VALUES(#{ysjzj},#{dxmc},#{ssmk},#{qxdx},#{sjkbm},#{sjkmc},#{ymbm},#{ymmc})
+		</insert>
+</mapper>		
