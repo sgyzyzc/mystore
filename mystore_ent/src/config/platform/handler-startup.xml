@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<handlers>
-	<handler handle-class="com.cib.cap4j.pec.resource.startup.ModelLoaderRegisterStartUpListener" />
-	<handler handle-class="com.cib.cap4j.pec.resource.startup.ResourceLoaderStartUpListener" />
-	<handler handle-class="com.cib.cap4j.core.startuplistener.SystemServiceStartupListener" />
-	<handler handle-class="com.cib.cap4j.pec.runtime.config.AppConfigStartupRuntimeListener" />
-	<handler handle-class="com.cib.cap4j.cfn.statistics.StatisticStartUpListener" beforeSpring="false"></handler>
-	<handler handle-class="com.cib.cap4j.cfn.statistics.ConnectionStartUpListener" beforeSpring="false"></handler>
-</handlers>
