@@ -10,13 +10,13 @@
 	http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.0.xsd  
     http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.0.xsd">
 
- 
+
     <!-- mysql database -->
     <bean class="com.mchange.v2.c3p0.ComboPooledDataSource" destroy-method="close" id="dataSource">
-        <property name="driverClass" value="com.mysql.jdbc.Driver"/>
-        <property name="jdbcUrl" value="jdbc:mysql://localhost:3306/mystore"/>
-        <property name="user" value="root"/>
-        <property name="password" value="123456"/>
+        <property name="driverClass" value="${jdbc.driverClass}"/>
+        <property name="jdbcUrl" value="${jdbc.jdbcUrl}"/>
+        <property name="user" value="${jdbc.user}"/>
+        <property name="password" value="${jdbc.password}"/>
         <property name="autoCommitOnClose" value="false"/>
         <property name="checkoutTimeout" value="50000"/>
         <property name="initialPoolSize" value="2"/>
@@ -38,6 +38,12 @@
         <property name="mapperLocations" value="classpath*:config/mybatis/**/*.sqlmap.xml"/>
         <property name="plugins" ref="paginationInterceptor"/>
     </bean>
+    
+    <!-- Informix -->
+    <!-- <bean class="com.cib.cap4j.core.base.dao.InformixPaginationInterceptor" id="paginationInterceptor"/> -->
+    <!-- oracle -->
+    <!-- <bean id="paginationInterceptor" class="com.cib.cap4j.core.base.dao.OraclePaginationInterceptor"/> -->
+    <!-- mysql -->
     <bean class="com.cib.cap4j.core.base.dao.MySqlPaginationInterceptor" id="paginationInterceptor"/>
     
     
@@ -51,8 +57,13 @@
         </property>
         <property name="hibernateProperties">
             <props>
+            	<!-- Informix -->
                 <!-- <prop key="hibernate.dialect">org.hibernate.dialect.InformixDialect</prop> -->
-                <prop key="hibernate.dialect">org.hibernate.dialect.OracleDialect</prop>
+                <!-- oracle -->
+                <!-- <prop key="hibernate.dialect">org.hibernate.dialect.OracleDialect</prop> -->
+                <!-- mysql -->
+                <prop key="hibernate.dialect">org.hibernate.dialect.MySQLDialect</prop>
+                
                 <prop key="hibernate.show_sql">false</prop>
                 <prop key="hibernate.format_sql">false</prop>
             </props>
@@ -60,6 +71,7 @@
         <property name="packagesToScan">
             <list>
                 <value>com.cib.cap4j.cfn.**.vo</value>
+                <value>com.yumu.**.vo</value>
             </list>
         </property>
     </bean>
@@ -103,7 +115,7 @@
 	</tx:advice>
     <!--Spring采用AOP进行事务控制,这里指定了业务逻辑层所有类的方法需要按txAdvice中配置的策略进行事务控制 -->	
 	<aop:config expose-proxy="true">
-		<aop:pointcut id="txPointcut" expression="execution(* com.cib..service..*.*(..))" />
+		<aop:pointcut id="txPointcut" expression="execution(* com.cib..service..*.*(..)) || execution(* com.yumu..service..*.*(..))" />
 		<aop:advisor advice-ref="txAdvice" pointcut-ref="txPointcut"/>
 	</aop:config>
     
