@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yumu.store.portal.dao.IPtClassDao">
+	<resultMap id="ptClassMap" type="com.yumu.store.portal.vo.PtClassVO">
+		<id column="CLASS_ID" property="clazzId" />
+		<result column="CLASS_CODE" property="clazzCode" />
+		<result column="CLASS_NAME" property="clazzName" />
+		<result column="CLASS_DESC" property="clazzDesc" />
+		<result column="PARENT_ID" property="parentId" />
+		<result column="TREELEVEL" property="treelevel" />
+		<result column="LASTFLAG" property="lastflag" />
+		<result column="SPATH" property="spath" />
+		<result column="STATUS" property="status" />
+		<result column="SORTNO" property="sortno" />
+		<result column="REMARK" property="remark" />
+		<result column="CREATE_TIME" property="createTime" />
+		<result column="MODIFY_TIME" property="modifyTime" />
+	</resultMap>
+
+	<select id="findAllInfosCount" parameterType="com.yumu.store.portal.vo.PtClassVO"
+		resultType="int">
+		select count(*)
+		from pt_class
+		where 1=1
+		<if test="clazzId != null and clazzId != ''"> and CLASS_ID = #{clazzId}</if>
+		<if test="clazzCode != null and clazzCode != ''"> and CLASS_CODE = #{clazzCode}</if>
+		<if test="clazzName != null and clazzName != ''"> and CLASS_NAME = #{clazzName}</if>
+		<if test="parentId != null and parentId != ''"> and PARENT_ID = #{parentId}</if>
+		<if test="treelevel != null and treelevel != ''"> and TREELEVEL = #{treelevel}</if>
+		<if test="clazzDesc != null and clazzDesc != ''"> and CLASS_DESC = #{clazzDesc}</if>
+		<if test="spath != null and spath != ''"> and SPATH = #{spath}</if>
+		<if test="status != null and status != ''"> and STATUS = #{status}</if>
+		<if test="lastflag != null and lastflag != ''"> and LASTFLAG = #{lastflag}</if>
+		<if test="createTime != null and createTime != ''"> and CREATE_TIME = #{createTime}</if>
+		<if test="modifyTime != null and modifyTime != ''"> and MODIFY_TIME = #{modifyTime}</if>
+	</select>
+
+	<select id="findAllInfos" parameterType="com.yumu.store.portal.vo.PtClassVO"
+		resultMap="ptClassMap">
+		select
+		CLASS_ID,CLASS_CODE,CLASS_NAME,CLASS_DESC,PARENT_ID,TREELEVEL,LASTFLAG,SPATH,STATUS,SORTNO,REMARK,CREATE_TIME,MODIFY_TIME
+		from pt_class
+		where 1=1
+		<if test="clazzId != null and clazzId != ''"> and CLASS_ID = #{clazzId}</if>
+		<if test="clazzCode != null and clazzCode != ''"> and CLASS_CODE = #{clazzCode}</if>
+		<if test="clazzName != null and clazzName != ''"> and CLASS_NAME = #{clazzName}</if>
+		<if test="parentId != null and parentId != ''"> and PARENT_ID = #{parentId}</if>
+		<if test="treelevel != null and treelevel != ''"> and TREELEVEL = #{treelevel}</if>
+		<if test="clazzDesc != null and clazzDesc != ''"> and CLASS_DESC = #{clazzDesc}</if>
+		<if test="spath != null and spath != ''"> and SPATH = #{spath}</if>
+		<if test="status != null and status != ''"> and STATUS = #{status}</if>
+		<if test="lastflag != null and lastflag != ''"> and LASTFLAG = #{lastflag}</if>
+		<if test="createTime != null and createTime != ''"> and CREATE_TIME = #{createTime}</if>
+		<if test="modifyTime != null and modifyTime != ''"> and MODIFY_TIME = #{modifyTime}</if>
+		order by SORTNO asc, CLASS_NAME asc
+	</select>
+
+	<insert id="save" parameterType="com.yumu.store.portal.vo.PtClassVO">
+		INSERT INTO pt_class
+		(CLASS_ID,CLASS_CODE,CLASS_NAME,CLASS_DESC,PARENT_ID,TREELEVEL,LASTFLAG,SPATH,STATUS,SORTNO,REMARK,CREATE_TIME,MODIFY_TIME)
+		values
+		(#{clazzId,jdbcType=VARCHAR},#{clazzCode,jdbcType=VARCHAR},#{clazzName,jdbcType=VARCHAR},#{clazzDesc,jdbcType=VARCHAR},#{parentId,jdbcType=VARCHAR},#{treelevel,jdbcType=INTEGER},#{lastflag,jdbcType=INTEGER},#{spath,jdbcType=VARCHAR},#{status,jdbcType=CHAR},#{sortno,jdbcType=INTEGER},#{remark,jdbcType=VARCHAR},#{createTime,jdbcType=DATE},#{modifyTime,jdbcType=DATE})
+	</insert>
+
+	<update id="update" parameterType="com.yumu.store.portal.vo.PtClassVO">
+		update pt_class
+		<trim prefix="SET" suffixOverrides=",">
+			<if test="clazzId != null"> CLASS_ID = #{clazzId},</if>
+			<if test="clazzCode != null"> CLASS_CODE = #{clazzCode},</if>
+			<if test="clazzName != null"> CLASS_NAME = #{clazzName},</if>
+			<if test="clazzDesc != null"> CLASS_DESC = #{clazzDesc},</if>
+			<if test="parentId != null"> PARENT_ID = #{parentId},</if>
+			<if test="treelevel != null"> TREELEVEL = #{treelevel},</if>
+			<if test="lastflag != null"> LASTFLAG = #{lastflag},</if>
+			<if test="spath != null"> SPATH = #{spath},</if>
+			<if test="status != null"> STATUS = #{status},</if>
+			<if test="sortno != null"> SORTNO = #{sortno},</if>
+			<if test="remark != null"> REMARK = #{remark},</if>
+			<if test="createTime != null"> CREATE_TIME = #{createTime},</if>
+			<if test="modifyTime != null"> MODIFY_TIME = #{modifyTime},</if>
+		</trim>
+		where
+		<trim prefix="" suffixOverrides="AND">
+			<if test="clazzId != null">CLASS_ID = #{clazzId} AND </if>
+		</trim>
+	</update>
+
+	<delete id="delete" parameterType="com.yumu.store.portal.vo.PtClassVO">
+		delete from pt_class where CLASS_ID in
+		<foreach collection="array" item="oneId" open="(" close=")"
+			separator=",">
+			#{oneId}
+		</foreach>
+	</delete>
+
+	<select id="getPtClassVOById" parameterType="string" resultMap="ptClassMap">
+		select
+		CLASS_ID,CLASS_CODE,CLASS_NAME,CLASS_DESC,PARENT_ID,TREELEVEL,LASTFLAG,SPATH,STATUS,SORTNO,REMARK,CREATE_TIME,MODIFY_TIME
+		from pt_class where CLASS_ID = #{value}
+	</select>
+</mapper>

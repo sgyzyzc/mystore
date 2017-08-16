@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yumu.store.portal.dao.IPtObjectDao">
+	<resultMap id="ptObjectMap" type="com.yumu.store.portal.vo.PtObjectVO">
+		<id column="OBJECT_ID" property="objectId" />
+		<result column="OBJECT_CODE" property="objectCode" />
+		<result column="OBJECT_NAME" property="objectName" />
+		<result column="OBJECT_DESC" property="objectDesc" />
+		<result column="CLASS_ID" property="clazzId" />
+		<result column="CLASS_NAME" property="clazzName" />
+		<result column="STATUS" property="status" />
+		<result column="SORTNO" property="sortno" />
+		<result column="CREAT_TIME" property="creatTime" />
+		<result column="MODIFY_TIME" property="modifyTime" />
+	</resultMap>
+
+	<select id="findAllInfosCount" parameterType="com.yumu.store.portal.vo.PtObjectVO"
+		resultType="int">
+		select count(*)
+		from pt_object a,pt_class b
+		where 1=1 and a.CLASS_ID=b.CLASS_ID
+		<if test="objectId != null and objectId != ''"> and a.OBJECT_ID = #{objectId}</if>
+		<if test="objectCode != null and objectCode != ''"> and a.OBJECT_CODE = #{objectCode}</if>
+		<if test="objectName != null and objectName != ''"> and a.OBJECT_NAME = #{objectName}</if>
+		<if test="clazzId != null and clazzId != ''"> and a.CLASS_ID = #{clazzId}</if>
+		<if test="status != null and status != ''"> and a.STATUS = #{status}</if>
+		<if test="creatTime != null and creatTime != ''"> and a.CREAT_TIME = #{creatTime}</if>
+		<if test="modifyTime != null and modifyTime != ''"> and a.MODIFY_TIME = #{modifyTime}</if>
+	</select>
+
+	<select id="findAllInfos" parameterType="com.yumu.store.portal.vo.PtObjectVO"
+		resultMap="ptObjectMap">
+		select
+		a.OBJECT_ID,a.OBJECT_CODE,a.OBJECT_NAME,a.OBJECT_DESC,a.CLASS_ID,a.STATUS,a.SORTNO,a.CREAT_TIME,a.MODIFY_TIME,b.CLASS_NAME
+		from pt_object a,pt_class b
+		where 1=1 and a.CLASS_ID=b.CLASS_ID
+		<if test="objectId != null and objectId != ''"> and a.OBJECT_ID = #{objectId}</if>
+		<if test="objectCode != null and objectCode != ''"> and a.OBJECT_CODE = #{objectCode}</if>
+		<if test="objectName != null and objectName != ''"> and a.OBJECT_NAME = #{objectName}</if>
+		<if test="clazzId != null and clazzId != ''"> and a.CLASS_ID = #{clazzId}</if>
+		<if test="status != null and status != ''"> and a.STATUS = #{status}</if>
+		<if test="creatTime != null and creatTime != ''"> and a.CREAT_TIME = #{creatTime}</if>
+		<if test="modifyTime != null and modifyTime != ''"> and a.MODIFY_TIME = #{modifyTime}</if>
+		order by a.OBJECT_ID asc, a.OBJECT_NAME asc
+	</select>
+
+	<insert id="save" parameterType="com.yumu.store.portal.vo.PtObjectVO">
+		INSERT INTO pt_object
+		(OBJECT_ID,OBJECT_CODE,OBJECT_NAME,OBJECT_DESC,CLASS_ID,STATUS,SORTNO,CREAT_TIME,MODIFY_TIME)
+		values
+		(#{objectId,jdbcType=VARCHAR},#{objectCode,jdbcType=VARCHAR},#{objectName,jdbcType=VARCHAR},#{objectDesc,jdbcType=VARCHAR},#{clazzId,jdbcType=VARCHAR},#{status,jdbcType=CHAR},#{sortno,jdbcType=INTEGER},#{creatTime,jdbcType=DATE},#{modifyTime,jdbcType=DATE})
+	</insert>
+
+	<update id="update" parameterType="com.yumu.store.portal.vo.PtObjectVO">
+		update pt_object
+		<trim prefix="SET" suffixOverrides=",">
+			<if test="objectId != null"> OBJECT_ID = #{objectId},</if>
+			<if test="objectCode != null"> OBJECT_CODE = #{objectCode},</if>
+			<if test="objectName != null"> OBJECT_NAME = #{objectName},</if>
+			<if test="objectDesc != null"> OBJECT_DESC = #{objectDesc},</if>
+			<if test="clazzId != null"> CLASS_ID = #{clazzId},</if>
+			<if test="status != null"> STATUS = #{status},</if>
+			<if test="sortno != null"> SORTNO = #{sortno},</if>
+			<if test="creatTime != null"> CREAT_TIME = #{creatTime},</if>
+			<if test="modifyTime != null"> MODIFY_TIME = #{modifyTime},</if>
+		</trim>
+		where
+		<trim prefix="" suffixOverrides="AND">
+			<if test="objectId != null">OBJECT_ID = #{objectId} AND </if>
+		</trim>
+	</update>
+
+	<delete id="delete" parameterType="com.yumu.store.portal.vo.PtObjectVO">
+		delete from pt_object where OBJECT_ID in
+		<foreach collection="array" item="oneId" open="(" close=")"
+			separator=",">
+			#{oneId}
+		</foreach>
+	</delete>
+
+	<select id="getPtObjectVOById" parameterType="string" resultMap="ptObjectMap">
+		select
+		a.OBJECT_ID,a.OBJECT_CODE,a.OBJECT_NAME,a.OBJECT_DESC,a.CLASS_ID,a.STATUS,a.SORTNO,a.CREAT_TIME,a.MODIFY_TIME,b.CLASS_NAME
+		from pt_object a,pt_class b where a.CLASS_ID=b.CLASS_ID and a.OBJECT_ID = #{value}
+	</select>
+</mapper>

@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yumu.store.portal.dao.IPtDataDao">
+	<resultMap id="ptDataMap" type="com.yumu.store.portal.vo.PtDataVO">
+		<id column="DATA_ID" property="dataId" />
+		<result column="PROP_NAME" property="propName" />
+		<result column="PROP_DESC" property="propDesc" />
+		<result column="VALUE" property="value" />
+		<result column="VALUE_TYPE" property="valueType" />
+		<result column="OBJECT_ID" property="objectId" />
+	</resultMap>
+
+	<select id="findAllInfosCount" parameterType="com.yumu.store.portal.vo.PtDataVO"
+		resultType="int">
+		select count(*)
+		from pt_data
+		where 1=1
+		<if test="dataId != null and dataId != ''"> and DATA_ID = #{dataId}</if>
+		<if test="propName != null and propName != ''"> and PROP_NAME = #{propName}</if>
+		<if test="propDesc != null and propDesc != ''"> and PROP_DESC = #{propDesc}</if>
+		<if test="valueType != null and valueType != ''"> and VALUE_TYPE = #{valueType}</if>
+		<if test="objectId != null and objectId != ''"> and OBJECT_ID = #{objectId}</if>
+	</select>
+
+	<select id="findAllInfos" parameterType="com.yumu.store.portal.vo.PtDataVO"
+		resultMap="ptDataMap">
+		select DATA_ID,PROP_NAME,PROP_DESC,VALUE,VALUE_TYPE,OBJECT_ID
+		from pt_data
+		where 1=1
+		<if test="dataId != null and dataId != ''"> and DATA_ID = #{dataId}</if>
+		<if test="propName != null and propName != ''"> and PROP_NAME = #{propName}</if>
+		<if test="propDesc != null and propDesc != ''"> and PROP_DESC = #{propDesc}</if>
+		<if test="valueType != null and valueType != ''"> and VALUE_TYPE = #{valueType}</if>
+		<if test="objectId != null and objectId != ''"> and OBJECT_ID = #{objectId}</if>
+		order by PROP_NAME asc
+	</select>
+
+	<insert id="save" parameterType="com.yumu.store.portal.vo.PtDataVO">
+		INSERT INTO pt_data
+		(DATA_ID,PROP_NAME,PROP_DESC,VALUE,VALUE_TYPE,OBJECT_ID)
+		values
+		(#{dataId,jdbcType=VARCHAR},#{propName,jdbcType=VARCHAR},#{propDesc,jdbcType=VARCHAR},#{value,jdbcType=VARCHAR},#{valueType,jdbcType=CHAR},#{objectId,jdbcType=VARCHAR})
+	</insert>
+
+	<update id="update" parameterType="com.yumu.store.portal.vo.PtDataVO">
+		update pt_data
+		<trim prefix="SET" suffixOverrides=",">
+			<if test="dataId != null"> DATA_ID = #{dataId},</if>
+			<if test="propName != null"> PROP_NAME = #{propName},</if>
+			<if test="propDesc != null"> PROP_DESC = #{propDesc},</if>
+			<if test="value != null"> VALUE = #{value},</if>
+			<if test="valueType != null"> VALUE_TYPE = #{valueType},</if>
+			<if test="objectId != null"> OBJECT_ID = #{objectId},</if>
+		</trim>
+		where
+		<trim prefix="" suffixOverrides="AND">
+			<if test="dataId != null">DATA_ID = #{dataId} AND </if>
+		</trim>
+	</update>
+
+	<delete id="delete" parameterType="com.yumu.store.portal.vo.PtDataVO">
+		delete from pt_data where DATA_ID in
+		<foreach collection="array" item="oneId" open="(" close=")"
+			separator=",">
+			#{oneId}
+		</foreach>
+	</delete>
+
+	<select id="getPtDataVOById" parameterType="string" resultMap="ptDataMap">
+		select DATA_ID,PROP_NAME,PROP_DESC,VALUE,VALUE_TYPE,OBJECT_ID
+		from pt_data where DATA_ID = #{value}
+	</select>
+</mapper>
